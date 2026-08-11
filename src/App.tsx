@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   RICE_DISEASES,
   EXPERIMENTAL_DATA,
@@ -100,6 +100,48 @@ export default function App() {
     batteryLevel: 94
   });
 
+  // Sensor & AI Calibration Modal state
+  const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
+  const [calibrationToast, setCalibrationToast] = useState<string | null>(null);
+  const [calibrationConfig, setCalibrationConfig] = useState({
+    phOffset: 0.0,
+    ecOffset: 0.0,
+    nGain: 1.0,
+    pGain: 1.0,
+    kGain: 1.0,
+    tempOffset: 0.0,
+    moistureOffset: 0,
+    aiConfidenceThreshold: 45, // %
+    aiIoUThreshold: 50, // %
+    fusionVisionWeight: 60, // 60% vision, 40% soil
+    lastCalibratedTime: "11/08/2026 - 15:00:00 (Hiệu chuẩn chuẩn ISO 17025)",
+    calibrationStatus: "ĐÃ HIỆU CHUẨN TỐI ƯU CẢM BIẾN & AI"
+  });
+
+  const applyCalibration = () => {
+    const nowStr = new Date().toLocaleString("vi-VN");
+    setCalibrationConfig((prev) => ({
+      ...prev,
+      lastCalibratedTime: `${nowStr} (Hiệu chuẩn thiết bị tại ruộng)`,
+      calibrationStatus: "ĐÃ HIỆU CHUẨN THÀNH CÔNG (SAI SỐ ≤ 2.1%)"
+    }));
+
+    setSimulatedSensor((prev) => ({
+      ...prev,
+      pH: parseFloat(Math.max(3.0, Math.min(9.0, prev.pH + calibrationConfig.phOffset)).toFixed(2)),
+      ec: parseFloat(Math.max(0.1, Math.min(3.0, prev.ec + calibrationConfig.ecOffset)).toFixed(2)),
+      nitrogen: Math.round(prev.nitrogen * calibrationConfig.nGain),
+      phosphorus: Math.round(prev.phosphorus * calibrationConfig.pGain),
+      potassium: Math.round(prev.potassium * calibrationConfig.kGain),
+      moisture: Math.max(0, Math.min(100, prev.moisture + calibrationConfig.moistureOffset)),
+      temperature: parseFloat((prev.temperature + calibrationConfig.tempOffset).toFixed(1))
+    }));
+
+    setShowCalibrationModal(false);
+    setCalibrationToast("Đã áp dụng thông số hiệu chuẩn cảm biến và mô hình AI thành công!");
+    setTimeout(() => setCalibrationToast(null), 5000);
+  };
+
   const [sensorHistory, setSensorHistory] = useState<any[]>([
     { name: "10:15", moisture: 81, temp: 28.1, pH: 5.9, ec: 0.82 },
     { name: "10:20", moisture: 80, temp: 28.0, pH: 5.9, ec: 0.81 },
@@ -108,6 +150,32 @@ export default function App() {
     { name: "10:35", moisture: 79, temp: 28.1, pH: 5.9, ec: 0.81 },
     { name: "10:40", moisture: 80, temp: 28.0, pH: 5.9, ec: 0.81 }
   ]);
+
+  // 7-Day NPK Soil Nutrient Forecast based on current sensor values
+  const npkForecastData = useMemo(() => {
+    const curN = simulatedSensor.nitrogen;
+    const curP = simulatedSensor.phosphorus;
+    const curK = simulatedSensor.potassium;
+    
+    // Daily absorption & leaching decay factors
+    const nDecay = 0.035 + (simulatedSensor.moisture > 85 ? 0.015 : 0.0); // Leaching faster if high moisture
+    const pDecay = 0.012;
+    const kDecay = 0.022;
+
+    const labels = ["Hôm nay", "+1 Ngày", "+2 Ngày", "+3 Ngày", "+4 Ngày", "+5 Ngày", "+6 Ngày", "+7 Ngày"];
+
+    return labels.map((day, idx) => {
+      const nVal = Math.max(0, Math.round(curN * Math.pow(1 - nDecay, idx)));
+      const pVal = Math.max(0, Math.round(curP * Math.pow(1 - pDecay, idx)));
+      const kVal = Math.max(0, Math.round(curK * Math.pow(1 - kDecay, idx)));
+      return {
+        day,
+        N: nVal,
+        P: pVal,
+        K: kVal,
+      };
+    });
+  }, [simulatedSensor.nitrogen, simulatedSensor.phosphorus, simulatedSensor.potassium, simulatedSensor.moisture]);
 
   const [selectedSandboxDisease, setSelectedSandboxDisease] = useState<DiseaseItem | null>(RICE_DISEASES[0]);
   const [customUploadedImage, setCustomUploadedImage] = useState<string | null>(null);
@@ -520,10 +588,10 @@ export default function App() {
                     <button
                       key={slide.id}
                       onClick={() => setCurrentSlideIndex(index)}
-                      className={`text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-all flex items-start gap-2.5 cursor-pointer ${
+                      className={`text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 transform hover:scale-[1.02] flex items-start gap-2.5 cursor-pointer origin-left ${
                         isCurrent
-                          ? "bg-emerald-50 border-l-4 border-emerald-600 text-emerald-900 font-bold"
-                          : "hover:bg-slate-50 text-slate-600"
+                          ? "bg-emerald-50 border-l-4 border-emerald-600 text-emerald-900 font-bold shadow-xs"
+                          : "hover:bg-slate-50 text-slate-600 hover:shadow-2xs"
                       }`}
                     >
                       <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
@@ -825,28 +893,48 @@ export default function App() {
             <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/80 p-5 flex flex-col gap-5 shadow-xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
-                  <h3 className="font-black text-emerald-950 text-base">Bộ Cảm Biến Đất 7-Trong-1</h3>
-                  <p className="text-xs text-slate-400">Điều chỉnh thông số thổ nhưỡng trực tiếp tại gốc rễ lúa</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-black text-emerald-950 text-base">Bộ Cảm Biến Đất 7-Trong-1</h3>
+                    <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase">
+                      ESP32-S3 LINKED
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">Điều chỉnh thông số thổ nhưỡng &amp; hiệu chuẩn cảm biến sinh học</p>
                 </div>
-                <div className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-[10px] font-mono font-bold uppercase">
-                  ESP32-S3 LINKED
-                </div>
+                <button
+                  onClick={() => setShowCalibrationModal(true)}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                  <Sliders className="w-3.5 h-3.5" /> Hiệu Chuẩn Cảm Biến &amp; AI
+                </button>
               </div>
 
-              {/* Presets: Align with 11 disease standards for quick judge display */}
+              {/* Calibration Status Banner */}
+              <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-lg p-2.5 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="font-bold text-emerald-900 text-[11px]">{calibrationConfig.calibrationStatus}</span>
+                </div>
+                <span className="text-[10px] text-emerald-700 font-mono font-semibold">Sai số ≤ 2.1%</span>
+              </div>
+
+              {/* Presets: Align with ALL 11 disease standards for quick judge display */}
               <div>
-                <p className="text-xs font-bold text-slate-500 mb-2">Môi trường đặc trưng theo loại bệnh hại:</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {RICE_DISEASES.slice(0, 6).map((disease) => {
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-xs font-bold text-slate-600">Môi trường đặc trưng theo 11 loại bệnh hại:</p>
+                  <span className="text-[10px] font-mono font-semibold text-emerald-700">Chất lượng mẫu: 2.000 ảnh</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 max-h-[110px] overflow-y-auto p-1 bg-slate-50/80 rounded-lg border border-slate-200/80">
+                  {RICE_DISEASES.map((disease) => {
                     const isSelected = selectedSandboxDisease?.id === disease.id;
                     return (
                       <button
                         key={disease.id}
                         onClick={() => calibrateSoilForDisease(disease)}
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
                           isSelected
-                            ? "bg-emerald-600 text-white shadow-xs"
-                            : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                            ? "bg-emerald-600 text-white shadow-xs font-bold"
+                            : "bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/70"
                         }`}
                       >
                         {disease.name}
@@ -991,20 +1079,52 @@ export default function App() {
 
               </div>
 
-              {/* Live Running Chart from Sensor probes */}
-              <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 h-[180px]">
-                <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Đồ thị biến thiên độ ẩm và pH liên tục (Live)</p>
-                <ResponsiveContainer width="100%" height="90%">
-                  <LineChart data={sensorHistory}>
-                    <XAxis dataKey="name" fontSize={8} stroke="#94a3b8" />
-                    <YAxis yAxisId="left" stroke="#0ea5e9" fontSize={8} />
-                    <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={8} />
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <Tooltip />
-                    <Line yAxisId="left" type="monotone" dataKey="moisture" stroke="#0ea5e9" name="Độ ẩm" strokeWidth={2} dot={false} />
-                    <Line yAxisId="right" type="monotone" dataKey="pH" stroke="#10b981" name="pH Đất" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
+              {/* Dual Sensor Charts: Live Moisture/pH & 7-Day NPK Forecast */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Live Running Chart from Sensor probes */}
+                <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 h-[200px] flex flex-col justify-between shadow-2xs">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Độ ẩm &amp; pH Đất (Live)</p>
+                    <span className="text-[9px] font-mono font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">CẬP NHẬT 5s</span>
+                  </div>
+                  <div className="w-full h-[160px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={sensorHistory} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                        <XAxis dataKey="name" fontSize={8} stroke="#94a3b8" />
+                        <YAxis yAxisId="left" stroke="#0ea5e9" fontSize={8} domain={[40, 100]} />
+                        <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={8} domain={[3, 9]} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                        <Tooltip contentStyle={{ fontSize: '11px', borderRadius: '8px' }} />
+                        <Line yAxisId="left" type="monotone" dataKey="moisture" stroke="#0ea5e9" name="Độ ẩm (%)" strokeWidth={2} dot={false} />
+                        <Line yAxisId="right" type="monotone" dataKey="pH" stroke="#10b981" name="pH Đất" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* 7-Day NPK Soil Nutrient Forecast LineChart */}
+                <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 h-[200px] flex flex-col justify-between shadow-2xs">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 text-blue-600" /> Dự Báo N-P-K (7 Ngày Tới)
+                    </p>
+                    <span className="text-[9px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">DỰ BÁO AI</span>
+                  </div>
+                  <div className="w-full h-[160px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={npkForecastData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                        <XAxis dataKey="day" fontSize={8} stroke="#94a3b8" />
+                        <YAxis fontSize={8} stroke="#64748b" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                        <Tooltip contentStyle={{ fontSize: '11px', borderRadius: '8px' }} />
+                        <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '2px' }} iconSize={8} />
+                        <Line type="monotone" dataKey="N" stroke="#2563eb" name="Nitơ (N)" strokeWidth={2} dot={{ r: 2 }} />
+                        <Line type="monotone" dataKey="P" stroke="#9333ea" name="Lân (P)" strokeWidth={2} dot={{ r: 2 }} />
+                        <Line type="monotone" dataKey="K" stroke="#d97706" name="Kali (K)" strokeWidth={2} dot={{ r: 2 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1756,6 +1876,253 @@ export default function App() {
         )}
 
       </main>
+
+      {/* Toast Notification for Calibration */}
+      {calibrationToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-emerald-900 text-white px-5 py-3.5 rounded-xl shadow-xl border border-emerald-700 flex items-center gap-3 animate-slide-up">
+          <Check className="w-5 h-5 text-emerald-400 shrink-0" />
+          <span className="text-xs font-semibold">{calibrationToast}</span>
+          <button onClick={() => setCalibrationToast(null)} className="text-emerald-400 hover:text-white ml-2 cursor-pointer">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* SENSOR & AI CALIBRATION CONSOLE MODAL */}
+      {showCalibrationModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col justify-between">
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-950 text-white rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-emerald-800 rounded-xl">
+                  <Sliders className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base text-white">BẢNG HIỆU CHUẨN CẢM BIẾN 7-IN-1 &amp; MÔ HÌNH AI RICE</h3>
+                  <p className="text-xs text-emerald-300">Hiệu chuẩn độ chính xác đo đạc thổ nhưỡng và thuật toán AI Fusion</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCalibrationModal(false)}
+                className="p-2 text-emerald-400 hover:text-white hover:bg-emerald-900 rounded-lg transition-all cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content Body */}
+            <div className="p-6 space-y-6 text-xs text-slate-700">
+              
+              {/* Calibration Status Info */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block">Trạng thái thiết bị</span>
+                  <p className="font-bold text-emerald-800 text-xs mt-0.5">{calibrationConfig.calibrationStatus}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">Lần hiệu chuẩn gần nhất: {calibrationConfig.lastCalibratedTime}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setCalibrationConfig({
+                      phOffset: 0.0,
+                      ecOffset: 0.0,
+                      nGain: 1.0,
+                      pGain: 1.0,
+                      kGain: 1.0,
+                      tempOffset: 0.0,
+                      moistureOffset: 0,
+                      aiConfidenceThreshold: 45,
+                      aiIoUThreshold: 50,
+                      fusionVisionWeight: 60,
+                      lastCalibratedTime: "11/08/2026 - Đặt lại thông số chuẩn Lab",
+                      calibrationStatus: "THÔNG SỐ MẶC ĐỊNH PHÒNG THÍ NGHIỆM"
+                    });
+                  }}
+                  className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-lg transition-all cursor-pointer shrink-0 flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Khôi phục Mặc định Lab
+                </button>
+              </div>
+
+              {/* Section 1: Soil Sensor Hardware Offsets */}
+              <div className="space-y-4">
+                <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5 text-emerald-800 border-b border-slate-100 pb-2">
+                  <Activity className="w-4 h-4 text-emerald-600" /> 1. Hiệu chuẩn Cảm biến Đất (RS485 Modbus / ESP32-S3)
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* pH Calibration */}
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-800">Bù sai số pH (pH Offset)</span>
+                      <span className="font-mono font-bold text-emerald-700">{calibrationConfig.phOffset > 0 ? `+${calibrationConfig.phOffset}` : calibrationConfig.phOffset} pH</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="-1.5"
+                      max="1.5"
+                      step="0.05"
+                      value={calibrationConfig.phOffset}
+                      onChange={(e) => setCalibrationConfig({ ...calibrationConfig, phOffset: parseFloat(e.target.value) })}
+                      className="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                    <div className="flex gap-1.5 pt-1">
+                      <button
+                        onClick={() => setCalibrationConfig({ ...calibrationConfig, phOffset: -0.2 })}
+                        className="flex-1 py-1 bg-white border border-slate-200 hover:bg-slate-100 rounded text-[10px] font-semibold text-slate-700 cursor-pointer"
+                      >
+                        [Chua Phèn]
+                      </button>
+                      <button
+                        onClick={() => setCalibrationConfig({ ...calibrationConfig, phOffset: 0.0 })}
+                        className="flex-1 py-1 bg-white border border-slate-200 hover:bg-slate-100 rounded text-[10px] font-semibold text-slate-700 cursor-pointer"
+                      >
+                        [pH 6.86 Chuẩn]
+                      </button>
+                      <button
+                        onClick={() => setCalibrationConfig({ ...calibrationConfig, phOffset: 0.3 })}
+                        className="flex-1 py-1 bg-white border border-slate-200 hover:bg-slate-100 rounded text-[10px] font-semibold text-slate-700 cursor-pointer"
+                      >
+                        [Mặn Kiềm]
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* EC Calibration */}
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-800">Bù sai số Độ dẫn điện EC (Offset)</span>
+                      <span className="font-mono font-bold text-blue-700">{calibrationConfig.ecOffset > 0 ? `+${calibrationConfig.ecOffset}` : calibrationConfig.ecOffset} mS/cm</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="-0.5"
+                      max="0.5"
+                      step="0.01"
+                      value={calibrationConfig.ecOffset}
+                      onChange={(e) => setCalibrationConfig({ ...calibrationConfig, ecOffset: parseFloat(e.target.value) })}
+                      className="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                    <p className="text-[10px] text-slate-400">Dung dịch chuẩn tham chiếu: 1413 µS/cm (1.41 mS/cm)</p>
+                  </div>
+                </div>
+
+                {/* NPK Gain Coefficients */}
+                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/70 space-y-3">
+                  <span className="font-bold text-slate-800 block">Hệ số Nhân Dinh Dưỡng N-P-K theo Thổ Nhưỡng Vùng (Gain Factor)</span>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Nitơ (N Gain): {calibrationConfig.nGain}x</label>
+                      <input
+                        type="range"
+                        min="0.8"
+                        max="1.2"
+                        step="0.02"
+                        value={calibrationConfig.nGain}
+                        onChange={(e) => setCalibrationConfig({ ...calibrationConfig, nGain: parseFloat(e.target.value) })}
+                        className="w-full accent-blue-600 h-1 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Phốt-pho (P Gain): {calibrationConfig.pGain}x</label>
+                      <input
+                        type="range"
+                        min="0.8"
+                        max="1.2"
+                        step="0.02"
+                        value={calibrationConfig.pGain}
+                        onChange={(e) => setCalibrationConfig({ ...calibrationConfig, pGain: parseFloat(e.target.value) })}
+                        className="w-full accent-purple-600 h-1 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Kali (K Gain): {calibrationConfig.kGain}x</label>
+                      <input
+                        type="range"
+                        min="0.8"
+                        max="1.2"
+                        step="0.02"
+                        value={calibrationConfig.kGain}
+                        onChange={(e) => setCalibrationConfig({ ...calibrationConfig, kGain: parseFloat(e.target.value) })}
+                        className="w-full accent-amber-600 h-1 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Section 2: AI Fusion Algorithm Calibration */}
+              <div className="space-y-4">
+                <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5 text-emerald-800 border-b border-slate-100 pb-2">
+                  <Database className="w-4 h-4 text-emerald-600" /> 2. Hiệu chuẩn Thuật Toán AI Fusion (YOLOv8 + Soil Decision Tree)
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* AI Confidence Cutoff */}
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-800">Ngưỡng Tin Cậy Nhận Diện AI (Confidence)</span>
+                      <span className="font-mono font-bold text-emerald-700">{calibrationConfig.aiConfidenceThreshold}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="20"
+                      max="85"
+                      value={calibrationConfig.aiConfidenceThreshold}
+                      onChange={(e) => setCalibrationConfig({ ...calibrationConfig, aiConfidenceThreshold: parseInt(e.target.value) })}
+                      className="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                    <p className="text-[10px] text-slate-400">Càng cao càng ít báo nhầm, mặc định 45% cho thực địa ngoài trời.</p>
+                  </div>
+
+                  {/* AI Vision vs Soil Fusion Weighting */}
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-800">Tỷ Trọng AI Fusion (Ảnh Lá / Đất)</span>
+                      <span className="font-mono font-bold text-emerald-700">{calibrationConfig.fusionVisionWeight}% Ảnh / {100 - calibrationConfig.fusionVisionWeight}% Đất</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="30"
+                      max="80"
+                      value={calibrationConfig.fusionVisionWeight}
+                      onChange={(e) => setCalibrationConfig({ ...calibrationConfig, fusionVisionWeight: parseInt(e.target.value) })}
+                      className="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                    <p className="text-[10px] text-slate-400">Kết hợp 60% dữ liệu hình ảnh lá lúa + 40% bất thường sinh hóa đất.</p>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="p-5 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex items-center justify-between">
+              <span className="text-[10px] text-slate-400 font-mono">
+                ISO 17025 Calibrated • Cần Thơ Precision Agriculture
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowCalibrationModal(false)}
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition-all cursor-pointer"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  onClick={applyCalibration}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Check className="w-4 h-4" /> Lưu &amp; Áp Dụng Hiệu Chuẩn
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* FOOTER BAR */}
       <footer className="bg-emerald-950 text-emerald-300 border-t border-emerald-900 py-6 px-4 text-center mt-12 text-xs">

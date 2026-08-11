@@ -15,6 +15,8 @@ export interface DiseaseItem {
   treatment: string[];
   preventiveMeasures: string[];
   sampleImage: string;
+  documentRef?: string;
+  documentSlide?: string;
   experimentalPhotoCount: number;
 }
 

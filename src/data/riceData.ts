@@ -35,7 +35,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
       "Bón phân cân đối N-P-K, hạn chế bón thừa Đạm giai đoạn lúa đẻ nhánh và làm đòng.",
       "Sử dụng giống lúa kháng bệnh đạo ôn phù hợp với địa phương."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1595131838595-3154b9f4450b?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23133e28'/><path d='M100 380 Q 250 120 500 20 Q 350 220 180 400 Z' fill='%2338a169'/><path d='M180 340 Q 280 180 450 60 Q 330 240 220 370 Z' fill='%2348bb78'/><ellipse cx='280' cy='200' rx='45' ry='16' transform='rotate(-35 280 200)' fill='%23742a2a' stroke='%23322659' stroke-width='3'/><ellipse cx='280' cy='200' rx='28' ry='8' transform='rotate(-35 280 200)' fill='%23e2e8f0'/><ellipse cx='360' cy='140' rx='35' ry='12' transform='rotate(-35 360 140)' fill='%23742a2a' stroke='%23322659' stroke-width='2'/><ellipse cx='360' cy='140' rx='20' ry='6' transform='rotate(-35 360 140)' fill='%23cbd5e0'/><rect x='15' y='15' width='270' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%2368d391'>SLIDE 23: HÌNH ĐẠO ÔN</text></svg>",
+    documentSlide: "Slide 23",
+    documentRef: "Tài liệu Trình chiếu Super Rice - Slide 23 (Hình Đạo ôn)",
     experimentalPhotoCount: 370
   },
   {
@@ -65,7 +67,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
       "Sạ hàng hoặc gieo thưa với mật độ chuẩn 80-100 kg/ha.",
       "Vệ sinh bờ ruộng, phát quang bụi rậm để giảm ẩm độ gầm lá."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%231a365d'/><rect x='220' y='0' width='70' height='400' fill='%232f855a'/><rect x='330' y='0' width='80' height='400' fill='%23276749'/><path d='M210 220 Q 250 200 290 230 Q 270 270 220 250 Z' fill='%23975a16' stroke='%23742a2a' stroke-width='3'/><path d='M220 120 Q 260 100 285 130 Q 260 160 215 140 Z' fill='%23b7791f' stroke='%23742a2a' stroke-width='3'/><path d='M325 180 Q 380 150 415 190 Q 370 230 330 200 Z' fill='%23975a16' stroke='%23742a2a' stroke-width='3'/><rect x='15' y='15' width='260' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23f6ad55'>SLIDE 23: HÌNH KHÔ VẰN</text></svg>",
+    documentSlide: "Slide 23",
+    documentRef: "Tài liệu Trình chiếu Super Rice - Slide 23 (Hình Khô vằn)",
     experimentalPhotoCount: 274
   },
   {
@@ -95,7 +99,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
       "Chủ động phòng trừ trước và sau các đợt bão hoặc mưa dầm.",
       "Không bón muộn đạm lai rai."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23064e3b'/><path d='M50 380 Q 200 150 550 40 L 520 20 Q 180 140 30 360 Z' fill='%2310b981'/><path d='M550 40 Q 350 180 150 380 L 120 380 Q 330 170 520 20 Z' fill='%23fef08a' stroke='%23eab308' stroke-width='2'/><path d='M300 180 Q 220 240 100 370 L 80 370 Q 200 230 280 170 Z' fill='%23fef08a'/><rect x='15' y='15' width='330' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23facc15'>SLIDE 22 &amp; TRANG 2: HÌNH BẠC LÁ</text></svg>",
+    documentSlide: "Slide 22 & Trang 2",
+    documentRef: "Thuyết Minh Trang 2 & Slide 22 (Hình Bạc lá / Cháy bìa lá)",
     experimentalPhotoCount: 284
   },
   {
@@ -107,9 +113,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     symptoms: [
       "Sâu nhả tơ cuốn 2 mép lá lại thành ống dẹp.",
       "Sâu nằm bên trong nhai ăn phần thịt lá màu xanh, để lại biểu bì màu trắng dọc lá.",
-      "Làm giảm khả năng quang hợp nghiêm trọng của bộ lá đòng."
+      "Làm giảm khả năng quang hợp nghiêm trọng của lá lúa."
     ],
-    favorableConditions: "Lúa thời kỳ đẻ nhánh rộ đến làm đòng, bón đạm nhiều làm lá lúa xanh mướt, mềm rủ.",
+    favorableConditions: "Thời tiết mát mẻ, độ ẩm cao, bón dư thừa phân đạm.",
     typicalSoil: {
       moisture: "78%",
       pH: "5.8",
@@ -117,15 +123,16 @@ export const RICE_DISEASES: DiseaseItem[] = [
       ec: "0.49 mS/cm"
     },
     treatment: [
-      "Kiểm tra mật độ sâu (nếu >20 con/m2 giai đoạn đòng thì phun).",
-      "Phun thuốc trừ sâu sinh học hoặc hóa học gốc Chlorantraniliprole, Emamectin benzoate, Indoxacarb.",
-      "Phun lúc tuổi sâu còn nhỏ (tuổi 1-2, sâu mới nhả tơ)."
+      "Phun thuốc khi mật độ sâu cao (>20-30 con/m2) ở giai đoạn làm đòng.",
+      "Sử dụng các gốc thuốc đặc trị như Chlorantraniliprole, Indoxacarb, Emamectin benzoate."
     ],
     preventiveMeasures: [
-      "Nói không với phun ngừa tràn lan để bảo vệ thiên địch (nhện, bọ rùa).",
-      "Bón phân NPK cân đối."
+      "Bón phân cân đối NPK, tránh bón đạm muộn.",
+      "Thăm ruộng thường xuyên để phát hiện bướm rộ."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1530507629858-e4977d30e9e0?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23065f46'/><path d='M100 350 Q 250 180 480 50 L 500 70 Q 270 200 120 370 Z' fill='%23059669'/><path d='M200 250 Q 300 170 420 100 L 410 115 Q 290 185 190 265 Z' fill='%23f8fafc' opacity='0.85'/><line x1='210' y1='240' x2='410' y2='110' stroke='%23475569' stroke-width='2' stroke-dasharray='4,4'/><rect x='15' y='15' width='310' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%2334d399'>TRANG 14: HÌNH SÂU CUỐN LÁ</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Sâu cuốn lá)",
     experimentalPhotoCount: 242
   },
   {
@@ -153,7 +160,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Bảo vệ bọ xít song gai và các loài kiến vương thiên địch."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23047857'/><path d='M120 380 Q 280 150 500 30 Q 380 180 180 400 Z' fill='%2310b981'/><circle cx='280' cy='200' r='25' fill='%23047857'/><circle cx='340' cy='140' r='30' fill='%23047857'/><circle cx='230' cy='250' r='20' fill='%23047857'/><rect x='15' y='15' width='310' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23a7f3d0'>TRANG 14: HÌNH SÂU ĂN LÁ</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Sâu ăn lá)",
     experimentalPhotoCount: 174
   },
   {
@@ -182,12 +191,14 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Sử dụng nấm Trichoderma phân hủy rơm rạ trước khi làm đất 10-15 ngày."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='260' fill='%230f766e'/><rect y='260' width='600' height='140' fill='%23451a03'/><path d='M280 270 Q 200 120 150 30' stroke='%23eab308' stroke-width='14' fill='none'/><path d='M300 270 Q 300 100 320 20' stroke='%23ca8a04' stroke-width='16' fill='none'/><path d='M320 270 Q 400 120 450 30' stroke='%23a16207' stroke-width='14' fill='none'/><path d='M290 270 Q 250 320 220 380 M 300 270 Q 300 330 300 390 M 310 270 Q 350 320 380 380' stroke='%231c1917' stroke-width='8' fill='none'/><rect x='15' y='15' width='320' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23fde047'>TRANG 14: NGỘ ĐỘC HỮU CƠ</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Ngộ độc hữu cơ)",
     experimentalPhotoCount: 148
   },
   {
     id: "lun_co",
-    name: "Bệnh Lùn Cỏ",
+    name: "Bệnh Lùn Cỏ (Vàng Lùn)",
     englishName: "Rice Grassy Stunt Virus",
     scientificName: "Rice Grassy Stunt Virus (RGSV)",
     category: "Bệnh do virus",
@@ -210,7 +221,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Thực hiện lịch gieo sạ né rầy theo khuyến cáo của Chi cục Trồng trọt & BVTV."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%230f52ba'/><path d='M300 380 Q 150 250 80 180' stroke='%23facc15' stroke-width='12' fill='none'/><path d='M300 380 Q 200 220 160 140' stroke='%23eab308' stroke-width='10' fill='none'/><path d='M300 380 Q 280 200 260 120' stroke='%23ca8a04' stroke-width='10' fill='none'/><path d='M300 380 Q 340 200 380 120' stroke='%23facc15' stroke-width='10' fill='none'/><path d='M300 380 Q 400 220 460 140' stroke='%23eab308' stroke-width='10' fill='none'/><path d='M300 380 Q 450 250 520 180' stroke='%23ca8a04' stroke-width='12' fill='none'/><rect x='15' y='15' width='280' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23facc15'>SLIDE 23: HÌNH VÀNG LÙN</text></svg>",
+    documentSlide: "Slide 23",
+    documentRef: "Tài liệu Trình chiếu Super Rice - Slide 23 (Hình Vàng Lùn)",
     experimentalPhotoCount: 138
   },
   {
@@ -238,7 +251,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Cày ải phơi dầm xới lật gốc rạ sau thu hoạch để tiêu diệt nhộng."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19657?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23047857'/><path d='M250 400 L 260 180 Q 280 100 340 30' stroke='%23f8fafc' stroke-width='12' fill='none'/><circle cx='255' cy='280' r='6' fill='%23451a03'/><path d='M300 400 L 280 220 Q 250 140 180 50' stroke='%2310b981' stroke-width='14' fill='none'/><rect x='15' y='15' width='320' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23f1f5f9'>TRANG 14: SÂU ĐỤC THÂN (BÔNG BẠC)</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Sâu đục thân)",
     experimentalPhotoCount: 126
   },
   {
@@ -265,7 +280,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Vệ sinh cỏ bờ quanh vùng canh tác."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23065f46'/><path d='M100 380 Q 280 150 500 30 Q 380 180 180 400 Z' fill='%2310b981'/><ellipse cx='300' cy='180' rx='40' ry='20' transform='rotate(25 300 180)' fill='%23065f46'/><ellipse cx='380' cy='120' rx='30' ry='15' transform='rotate(25 380 120)' fill='%23065f46'/><rect x='15' y='15' width='330' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%236ee7b7'>TRANG 14: TỔN THƯƠNG CHÂU CHẤU</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Châu chấu hại lúa)",
     experimentalPhotoCount: 116
   },
   {
@@ -293,7 +310,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Thoát nước kịp thời sau mưa bão."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23064e3b'/><path d='M100 380 Q 280 150 500 30 Q 380 180 180 400 Z' fill='%2310b981'/><path d='M180 300 L 420 80' stroke='%23eab308' stroke-width='4' stroke-dasharray='15,8' fill='none'/><path d='M200 310 L 440 90' stroke='%23ca8a04' stroke-width='3' stroke-dasharray='20,10' fill='none'/><rect x='15' y='15' width='330' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23fde047'>TRANG 14: SỌC VI KHUẨN TRÊN LÁ</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Sọc vi khuẩn)",
     experimentalPhotoCount: 98
   },
   {
@@ -321,7 +340,9 @@ export const RICE_DISEASES: DiseaseItem[] = [
     preventiveMeasures: [
       "Sử dụng giống lúa kháng rầy xanh."
     ],
-    sampleImage: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=600&q=80",
+    sampleImage: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' width='100%' height='100%'><rect width='600' height='400' fill='%23065f46'/><path d='M100 380 Q 280 150 500 30 Q 380 180 180 400 Z' fill='%2310b981'/><path d='M350 140 Q 430 80 500 30 Q 420 120 320 200 Z' fill='%23f97316'/><rect x='15' y='15' width='280' height='36' rx='6' fill='rgba(0,0,0,0.75)'/><text x='25' y='38' font-family='sans-serif' font-size='13' font-weight='bold' fill='%23fdba74'>TRANG 14: BỆNH TUNGRO</text></svg>",
+    documentSlide: "Trang 14",
+    documentRef: "Bảng 2.000 ảnh thực nghiệm - Trang 14 (Bệnh Tungro)",
     experimentalPhotoCount: 30
   }
 ];
