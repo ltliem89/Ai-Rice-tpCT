@@ -50,7 +50,9 @@ import {
   Wifi,
   Copy,
   ExternalLink,
-  Award
+  Award,
+  HelpCircle,
+  Sparkles
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -103,6 +105,15 @@ export default function App() {
   // Sensor & AI Calibration Modal state
   const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
   const [calibrationToast, setCalibrationToast] = useState<string | null>(null);
+
+  // Quick Guide Modal State for Jury/BGK
+  const [showQuickGuideModal, setShowQuickGuideModal] = useState<boolean>(false);
+  const [quickGuideTab, setQuickGuideTab] = useState<"slides" | "sandbox" | "library" | "admin" | "qa">("slides");
+
+  const openQuickGuide = (tab?: "slides" | "sandbox" | "library" | "admin" | "qa") => {
+    setQuickGuideTab(tab || activeTab);
+    setShowQuickGuideModal(true);
+  };
   const [calibrationConfig, setCalibrationConfig] = useState({
     phOffset: 0.0,
     ecOffset: 0.0,
@@ -537,66 +548,77 @@ export default function App() {
 
       {/* PRIMARY NAVIGATION TABS */}
       <nav className="bg-emerald-950 text-emerald-100 border-b border-emerald-900 sticky top-[65px] z-40 px-4" id="main-nav">
-        <div className="max-w-7xl mx-auto flex overflow-x-auto scrollbar-none gap-1 py-1.5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 py-1.5 overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => setActiveTab("slides")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "slides"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "hover:bg-emerald-900/50 text-emerald-200"
+              }`}
+              id="nav-tab-slides"
+            >
+              <FileText className="w-4 h-4" />
+              Trình Chiếu Slide
+            </button>
+            <button
+              onClick={() => setActiveTab("sandbox")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "sandbox"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "hover:bg-emerald-900/50 text-emerald-200"
+              }`}
+              id="nav-tab-sandbox"
+            >
+              <Sliders className="w-4 h-4" />
+              Mô Phỏng Live
+            </button>
+            <button
+              onClick={() => setActiveTab("library")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "library"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "hover:bg-emerald-900/50 text-emerald-200"
+              }`}
+              id="nav-tab-library"
+            >
+              <BookOpen className="w-4 h-4" />
+              Thư Viện 11 Bệnh
+            </button>
+            <button
+              onClick={() => setActiveTab("admin")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "admin"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "hover:bg-emerald-900/50 text-emerald-200"
+              }`}
+              id="nav-tab-admin"
+            >
+              <DollarSign className="w-4 h-4" />
+              Kinh Doanh &amp; Admin
+            </button>
+            <button
+              onClick={() => setActiveTab("qa")}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "qa"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "hover:bg-emerald-900/50 text-emerald-200"
+              }`}
+              id="nav-tab-qa"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Vấn Đáp BGK
+            </button>
+          </div>
+
           <button
-            onClick={() => setActiveTab("slides")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "slides"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "hover:bg-emerald-900/50 text-emerald-200"
-            }`}
-            id="nav-tab-slides"
+            onClick={() => openQuickGuide(activeTab)}
+            className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-3.5 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer whitespace-nowrap shrink-0 border border-amber-300"
+            title="Mở hướng dẫn sử dụng nhanh dành cho Ban Giám Khảo"
           >
-            <FileText className="w-4 h-4" />
-            Trình Chiếu Slide
-          </button>
-          <button
-            onClick={() => setActiveTab("sandbox")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "sandbox"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "hover:bg-emerald-900/50 text-emerald-200"
-            }`}
-            id="nav-tab-sandbox"
-          >
-            <Sliders className="w-4 h-4" />
-            Mô Phỏng Thực Nghiệm Live
-          </button>
-          <button
-            onClick={() => setActiveTab("library")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "library"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "hover:bg-emerald-900/50 text-emerald-200"
-            }`}
-            id="nav-tab-library"
-          >
-            <BookOpen className="w-4 h-4" />
-            Thư Viện 11 Loại Bệnh
-          </button>
-          <button
-            onClick={() => setActiveTab("admin")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "admin"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "hover:bg-emerald-900/50 text-emerald-200"
-            }`}
-            id="nav-tab-admin"
-          >
-            <DollarSign className="w-4 h-4" />
-            Kinh Doanh &amp; Admin
-          </button>
-          <button
-            onClick={() => setActiveTab("qa")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "qa"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "hover:bg-emerald-900/50 text-emerald-200"
-            }`}
-            id="nav-tab-qa"
-          >
-            <MessageSquare className="w-4 h-4" />
-            Vấn Đáp Ban Giám Khảo
+            <HelpCircle className="w-4 h-4 text-slate-950" />
+            <span className="hidden sm:inline">Hướng dẫn nhanh</span> (BGK)
           </button>
         </div>
       </nav>
@@ -2200,6 +2222,316 @@ export default function App() {
                   className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Check className="w-4 h-4" /> Lưu &amp; Áp Dụng Hiệu Chuẩn
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* QUICK GUIDE MODAL FOR JURY / BAN GIÁM KHẢO */}
+      {showQuickGuideModal && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-3 md:p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col justify-between">
+            
+            {/* Modal Header */}
+            <div className="p-4 md:p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-950 text-white rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-amber-400 text-slate-950 rounded-xl shadow-xs font-black">
+                  <HelpCircle className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">
+                      DÀNH CHO BAN GIÁM KHẢO
+                    </span>
+                    <span className="text-[10px] font-semibold text-emerald-300">
+                      Hệ Thống AI-RICE v3.0
+                    </span>
+                  </div>
+                  <h3 className="font-extrabold text-base md:text-lg text-white mt-0.5">
+                    HƯỚNG DẪN NHANH TRẢI NGHIỆM TÍNH NĂNG
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowQuickGuideModal(false)}
+                className="p-2 text-emerald-400 hover:text-white hover:bg-emerald-900 rounded-lg transition-all cursor-pointer"
+                title="Đóng cửa sổ"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Internal Navigation Tabs */}
+            <div className="bg-slate-100 border-b border-slate-200 px-4 py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+              <button
+                onClick={() => setQuickGuideTab("slides")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  quickGuideTab === "slides"
+                    ? "bg-emerald-700 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" /> 1. Slide Báo Cáo
+              </button>
+              <button
+                onClick={() => setQuickGuideTab("sandbox")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  quickGuideTab === "sandbox"
+                    ? "bg-emerald-700 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <Sliders className="w-3.5 h-3.5" /> 2. Live Sandbox AI
+              </button>
+              <button
+                onClick={() => setQuickGuideTab("library")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  quickGuideTab === "library"
+                    ? "bg-emerald-700 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" /> 3. Thư Viện 11 Bệnh
+              </button>
+              <button
+                onClick={() => setQuickGuideTab("admin")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  quickGuideTab === "admin"
+                    ? "bg-emerald-700 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <DollarSign className="w-3.5 h-3.5" /> 4. Kinh Doanh &amp; Admin
+              </button>
+              <button
+                onClick={() => setQuickGuideTab("qa")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  quickGuideTab === "qa"
+                    ? "bg-emerald-700 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5" /> 5. Vấn Đáp BGK
+              </button>
+            </div>
+
+            {/* Modal Content Details */}
+            <div className="p-5 md:p-6 overflow-y-auto space-y-5 text-xs text-slate-700 max-h-[60vh]">
+              {quickGuideTab === "slides" && (
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 border border-emerald-200/80 p-4 rounded-xl flex items-start gap-3">
+                    <FileText className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">Tab 1: Trình Chiếu Báo Cáo KH-KT (Slide Center)</h4>
+                      <p className="text-slate-600 text-xs mt-1 leading-relaxed">
+                        Chứa bộ 8 Slide báo cáo chuẩn cuộc thi Sáng Tạo KH-KT Cần Thơ kèm bộ đếm thời gian thực trình bày và Kịch bản thuyết trình (Teleprompter) chi tiết cho học sinh.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" /> Tính Năng Trọng Tâm
+                      </h5>
+                      <ul className="space-y-1.5 text-slate-700 text-xs list-disc pl-4">
+                        <li><strong>Điều hướng Slide:</strong> Sử dụng phím mũi tên `←` `→`, phím Space, hoặc ấn chọn từ danh sách 8 slide bên trái.</li>
+                        <li><strong>Teleprompter:</strong> Lời thoại thuyết trình tự động đồng bộ theo từng slide, có thể tăng giảm cỡ chữ.</li>
+                        <li><strong>Bảng đếm giờ:</strong> Bấm nút Play/Pause để quản lý chính xác thời gian 5-10 phút báo cáo.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-amber-50/80 border border-amber-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Check className="w-4 h-4 text-amber-700" /> Thao Tác Đề Xuất Cho BGK
+                      </h5>
+                      <ol className="space-y-1.5 text-amber-900 text-xs list-decimal pl-4">
+                        <li>Bấm phím `→` để xem qua các slide số liệu thực nghiệm.</li>
+                        <li>Xem <strong>Slide 4 (Mô hình AI Fusion)</strong> &amp; <strong>Slide 7 (Tài chính &amp; Giá thành)</strong>.</li>
+                        <li>Kiểm tra kịch bản lời thoại ở ô dưới cùng màn hình.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {quickGuideTab === "sandbox" && (
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 border border-emerald-200/80 p-4 rounded-xl flex items-start gap-3">
+                    <Sliders className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">Tab 2: Mô Phỏng Thực Nghiệm Live &amp; AI Fusion</h4>
+                      <p className="text-slate-600 text-xs mt-1 leading-relaxed">
+                        Trái tim của hệ thống: Kết hợp thuật toán nhận dạng hình ảnh lá lúa (YOLOv8 / Gemini 3.6 Flash) cùng bộ cảm biến đất 7-in-1 đo NPK, pH, EC, độ ẩm, nhiệt độ.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" /> Tính Năng Trọng Tâm
+                      </h5>
+                      <ul className="space-y-1.5 text-slate-700 text-xs list-disc pl-4">
+                        <li><strong>Đổi màu cảnh báo điểm nóng:</strong> Các chỉ số thổ nhưỡng tự động chuyển màu Vàng/Đỏ khi vượt ngưỡng an toàn.</li>
+                        <li><strong>Đồ thị dự báo NPK 7 ngày:</strong> Biểu đồ đường dự đoán nguy cơ cạn kiệt đạm/lân/kali.</li>
+                        <li><strong>Hiệu Chuẩn Cảm Biến &amp; AI:</strong> Nút mở console bù sai số đo đạc phòng thí nghiệm.</li>
+                        <li><strong>Mô phỏng 11 bệnh:</strong> Nút preset 11 loại bệnh lúa lập tức đưa chỉ số đất và ảnh tương ứng.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-amber-50/80 border border-amber-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Check className="w-4 h-4 text-amber-700" /> Thao Tác Đề Xuất Cho BGK
+                      </h5>
+                      <ol className="space-y-1.5 text-amber-900 text-xs list-decimal pl-4">
+                        <li>Ấn chọn mẫu <strong>"Bệnh Đạo Ôn"</strong> để load dữ liệu chuẩn.</li>
+                        <li>Kéo thanh trượt <strong>Nitơ (N) &gt; 120 mg/kg</strong> để xem thẻ đổi sang màu Đỏ/Phát hiện điểm nóng.</li>
+                        <li>Ấn nút <strong>"Phân Tích AI Fusion Ngay"</strong> để xem khuyến cáo canh tác chi tiết.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {quickGuideTab === "library" && (
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 border border-emerald-200/80 p-4 rounded-xl flex items-start gap-3">
+                    <BookOpen className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">Tab 3: Thư Viện Tra Cứu 11 Loại Bệnh Hại Lúa</h4>
+                      <p className="text-slate-600 text-xs mt-1 leading-relaxed">
+                        Cơ sở dữ liệu 2.000 mẫu ảnh và hồ sơ sinh học chi tiết về 11 loại bệnh &amp; sâu hại phổ biến tại vùng Đồng bằng Sông Cửu Long.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" /> Tính Năng Trọng Tâm
+                      </h5>
+                      <ul className="space-y-1.5 text-slate-700 text-xs list-disc pl-4">
+                        <li><strong>Bộ lọc thông minh:</strong> Tìm kiếm theo tên bệnh, phân loại nấm, vi khuẩn, virus, sâu hại hoặc độc tố đất.</li>
+                        <li><strong>Chỉ số môi trường chuẩn:</strong> Mức NPK, pH, EC đặc trưng thúc đẩy bùng phát bệnh.</li>
+                        <li><strong>Phác đồ điều trị:</strong> Khuyến cáo thuốc bảo vệ thực vật sinh học &amp; kỹ thuật bón phân cân đối.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-amber-50/80 border border-amber-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Check className="w-4 h-4 text-amber-700" /> Thao Tác Đề Xuất Cho BGK
+                      </h5>
+                      <ol className="space-y-1.5 text-amber-900 text-xs list-decimal pl-4">
+                        <li>Gõ từ khóa <strong>"Bạc lá"</strong> hoặc <strong>"Đốm vằn"</strong> vào ô tìm kiếm.</li>
+                        <li>Xem bảng chỉ số môi trường đất lý tưởng cho từng loại bệnh.</li>
+                        <li>Xem phác đồ phun xịt phòng trừ sâu bệnh.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {quickGuideTab === "admin" && (
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 border border-emerald-200/80 p-4 rounded-xl flex items-start gap-3">
+                    <DollarSign className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">Tab 4: Phương Án Thương Mại Hóa &amp; Quản Lý Admin</h4>
+                      <p className="text-slate-600 text-xs mt-1 leading-relaxed">
+                        Chứng minh tính khả thi kinh tế thương mại hóa sản phẩm thiết bị IoT và mô hình quản lý phần mềm SaaS cho hộ nông dân.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" /> Tính Năng Trọng Tâm
+                      </h5>
+                      <ul className="space-y-1.5 text-slate-700 text-xs list-disc pl-4">
+                        <li><strong>Mô phỏng tài chính Live:</strong> Điều chỉnh Vốn thiết bị, Giá bán, Phí thuê bao web để tính tự động Lợi nhuận &amp; ROI.</li>
+                        <li><strong>Quản lý tài khoản nông dân:</strong> Khởi tạo tài khoản ảo, cấp Khóa truy cập (Access Key) &amp; Link Camera thực địa.</li>
+                        <li><strong>Cấu trúc chi phí linh kiện:</strong> Bảng phân rã chi phí chi tiết cảm biến Modbus RS485 &amp; bo mạch ESP32.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-amber-50/80 border border-amber-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Check className="w-4 h-4 text-amber-700" /> Thao Tác Đề Xuất Cho BGK
+                      </h5>
+                      <ol className="space-y-1.5 text-amber-900 text-xs list-decimal pl-4">
+                        <li>Kéo thanh trượt <strong>"Số lượng Hộ dân"</strong> lên 100 hộ để xem thu nhập ròng tự động cập nhật.</li>
+                        <li>Điền tên hộ dân mới và ấn <strong>"Tạo Tài Khoản"</strong>.</li>
+                        <li>Ấn nút <strong>"Sao chép link"</strong> để dùng đường dẫn nông dân riêng biệt.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {quickGuideTab === "qa" && (
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 border border-emerald-200/80 p-4 rounded-xl flex items-start gap-3">
+                    <MessageSquare className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">Tab 5: Cố Vấn Vấn Đáp Ban Giám Khảo (AI Defense)</h4>
+                      <p className="text-slate-600 text-xs mt-1 leading-relaxed">
+                        Ngân hàng 12+ câu hỏi phản biện hóc búa về công nghệ AI, cảm biến, tính kinh tế và môi trường ĐBSCL kèm câu trả lời khoa học chứng minh bằng số liệu.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-emerald-600" /> Tính Năng Trọng Tâm
+                      </h5>
+                      <ul className="space-y-1.5 text-slate-700 text-xs list-disc pl-4">
+                        <li><strong>Preset câu hỏi BGK:</strong> Nút bấm nhanh các câu hỏi thường gặp của Hội đồng giám khảo KH-KT.</li>
+                        <li><strong>AI Giám Khảo Phản Biện:</strong> Ô nhập câu hỏi tùy ý để thử nghiệm phản ứng trả lời của hệ thống.</li>
+                        <li><strong>Độ chính xác khoa học:</strong> Đã được tham chiếu chuyên môn cùng kỹ sư nông nghiệp &amp; giáo viên hướng dẫn.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-amber-50/80 border border-amber-200 p-4 rounded-xl space-y-2">
+                      <h5 className="font-bold text-amber-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Check className="w-4 h-4 text-amber-700" /> Thao Tác Đề Xuất Cho BGK
+                      </h5>
+                      <ol className="space-y-1.5 text-amber-900 text-xs list-decimal pl-4">
+                        <li>Ấn chọn câu hỏi preset bên cột trái (ví dụ: <em>"Tại sao kết hợp ảnh lá và cảm biến đất?"</em>).</li>
+                        <li>Nhập một câu hỏi phản biện bất kỳ vào ô chat bên dưới.</li>
+                        <li>Đọc câu trả lời được sinh ra theo thời gian thực.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 font-medium">
+                Ứng dụng AI-RICE v3.0 • Trường PTDTNT THCS Him Lam, Cần Thơ
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowQuickGuideModal(false)}
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl transition-all cursor-pointer text-xs"
+                >
+                  Đóng Hướng Dẫn
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab(quickGuideTab);
+                    setShowQuickGuideModal(false);
+                  }}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer text-xs"
+                >
+                  Thử Ngay Tab Này <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
