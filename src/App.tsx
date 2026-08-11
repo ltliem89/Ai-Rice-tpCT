@@ -177,6 +177,38 @@ export default function App() {
     });
   }, [simulatedSensor.nitrogen, simulatedSensor.phosphorus, simulatedSensor.potassium, simulatedSensor.moisture]);
 
+  // Helper to determine sensor value status and dynamic background color
+  const getSensorStatus = (param: 'N' | 'P' | 'K' | 'pH' | 'moisture' | 'ec', value: number) => {
+    switch (param) {
+      case 'N':
+        if (value >= 80 && value <= 120) return { status: 'optimal', label: 'Tối ưu (80-120)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 60 && value < 80) || (value > 120 && value <= 150)) return { status: 'warning', label: value > 120 ? '⚠️ Khá cao' : '⚠️ Thấp', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value > 150 ? '🚨 Cực cao (Dễ Bệnh Đạo Ôn!)' : '🚨 Rất thiếu đạm!', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      case 'P':
+        if (value >= 30 && value <= 50) return { status: 'optimal', label: 'Tối ưu (30-50)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 20 && value < 30) || (value > 50 && value <= 70)) return { status: 'warning', label: value > 50 ? '⚠️ Dư lân' : '⚠️ Thiếu lân', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value > 70 ? '🚨 Dư lân nặng' : '🚨 Rất nghèo lân', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      case 'K':
+        if (value >= 65 && value <= 100) return { status: 'optimal', label: 'Tối ưu (65-100)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 50 && value < 65) || (value > 100 && value <= 130)) return { status: 'warning', label: value < 65 ? '⚠️ Thiếu Kali' : '⚠️ Cao', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value < 50 ? '🚨 Rất thiếu Kali (Dễ Bạc Lá!)' : '🚨 Quá thừa Kali', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      case 'pH':
+        if (value >= 5.5 && value <= 6.5) return { status: 'optimal', label: 'Tối ưu (5.5-6.5)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 5.0 && value < 5.5) || (value > 6.5 && value <= 7.2)) return { status: 'warning', label: value < 5.5 ? '⚠️ Đất chua phèn' : '⚠️ Hơi kiềm', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value < 5.0 ? '🚨 Chua Phèn Nặng!' : '🚨 Kiềm / Mặn!', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      case 'moisture':
+        if (value >= 70 && value <= 88) return { status: 'optimal', label: 'Tối ưu (70-88%)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 60 && value < 70) || (value > 88 && value <= 92)) return { status: 'warning', label: value > 88 ? '⚠️ Ẩm rất cao' : '⚠️ Hơi khô', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value > 92 ? '🚨 Ngập úng nặng!' : '🚨 Khô hạn nặng!', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      case 'ec':
+        if (value >= 0.40 && value <= 0.70) return { status: 'optimal', label: 'Tối ưu (0.4-0.7)', bg: 'bg-emerald-50/60 border-emerald-200/80', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        if ((value >= 0.25 && value < 0.40) || (value > 0.70 && value <= 1.00)) return { status: 'warning', label: value > 0.70 ? '⚠️ Dinh dưỡng cao' : '⚠️ Loãng', bg: 'bg-amber-50/90 border-amber-300 ring-1 ring-amber-300/60 shadow-2xs', badge: 'bg-amber-200 text-amber-900 border-amber-300 font-bold' };
+        return { status: 'danger', label: value > 1.00 ? '🚨 Nhiễm Mặn!' : '🚨 Nghèo dinh dưỡng', bg: 'bg-rose-50/95 border-rose-300 ring-1 ring-rose-300/80 shadow-2xs', badge: 'bg-rose-200 text-rose-900 border-rose-300 animate-pulse font-bold' };
+      default:
+        return { status: 'optimal', label: 'Tối ưu', bg: 'bg-slate-50/50 border-slate-100', badge: 'bg-slate-100 text-slate-800' };
+    }
+  };
+
   const [selectedSandboxDisease, setSelectedSandboxDisease] = useState<DiseaseItem | null>(RICE_DISEASES[0]);
   const [customUploadedImage, setCustomUploadedImage] = useState<string | null>(null);
   const [sandboxImageBase64, setSandboxImageBase64] = useState<string | null>(null);
@@ -945,137 +977,189 @@ export default function App() {
               </div>
 
               {/* 7 sliders config */}
-              <div className="space-y-4">
-                
-                {/* Nitrogen */}
-                <div className="flex flex-col gap-1.5 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-700 flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
-                      Hàm lượng Nitơ (Đạm - N)
-                    </span>
-                    <span className="font-mono font-bold text-blue-700">{simulatedSensor.nitrogen} mg/kg</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="300"
-                    value={simulatedSensor.nitrogen}
-                    onChange={(e) => setSimulatedSensor({ ...simulatedSensor, nitrogen: parseInt(e.target.value) })}
-                    className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
-                  />
-                  <div className="flex justify-between text-[10px] text-slate-400">
-                    <span>Thấp (Thiếu hụt)</span>
-                    <span className={simulatedSensor.nitrogen > 150 ? "text-red-500 font-bold" : "text-slate-400"}>
-                      {simulatedSensor.nitrogen > 150 ? "⚠️ Quá Cao (Dễ bệnh Đạo ôn!)" : "Tối ưu: 80 - 120"}
-                    </span>
-                    <span>Cực Cao</span>
-                  </div>
-                </div>
+              <div className="space-y-3.5">
+                {(() => {
+                  const nStatus = getSensorStatus('N', simulatedSensor.nitrogen);
+                  const pStatus = getSensorStatus('P', simulatedSensor.phosphorus);
+                  const kStatus = getSensorStatus('K', simulatedSensor.potassium);
+                  const phStatus = getSensorStatus('pH', simulatedSensor.pH);
+                  const moistureStatus = getSensorStatus('moisture', simulatedSensor.moisture);
+                  const ecStatus = getSensorStatus('ec', simulatedSensor.ec);
 
-                {/* Phosphorus */}
-                <div className="flex flex-col gap-1.5 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-700 flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 bg-purple-500 rounded-full"></span>
-                      Hàm lượng Phốt-pho (Lân - P)
-                    </span>
-                    <span className="font-mono font-bold text-purple-700">{simulatedSensor.phosphorus} mg/kg</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="150"
-                    value={simulatedSensor.phosphorus}
-                    onChange={(e) => setSimulatedSensor({ ...simulatedSensor, phosphorus: parseInt(e.target.value) })}
-                    className="w-full accent-purple-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
-                  />
-                  <div className="flex justify-between text-[10px] text-slate-400">
-                    <span>Nghèo Lân</span>
-                    <span>Tối ưu: 30 - 50</span>
-                    <span>Dư thừa Lân</span>
-                  </div>
-                </div>
+                  const abnormalCount = [nStatus, pStatus, kStatus, phStatus, moistureStatus, ecStatus].filter(
+                    (s) => s.status !== 'optimal'
+                  ).length;
 
-                {/* Potassium */}
-                <div className="flex flex-col gap-1.5 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-700 flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
-                      Hàm lượng Kali (K)
-                    </span>
-                    <span className="font-mono font-bold text-amber-700">{simulatedSensor.potassium} mg/kg</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="200"
-                    value={simulatedSensor.potassium}
-                    onChange={(e) => setSimulatedSensor({ ...simulatedSensor, potassium: parseInt(e.target.value) })}
-                    className="w-full accent-amber-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
-                  />
-                  <div className="flex justify-between text-[10px] text-slate-400">
-                    <span className={simulatedSensor.potassium < 50 ? "text-amber-600 font-bold" : "text-slate-400"}>
-                      {simulatedSensor.potassium < 50 ? "⚠️ Thấp (Dễ bạc lá!)" : "Thiếu Kali"}
-                    </span>
-                    <span>Tối ưu: 65 - 100</span>
-                    <span>Cao</span>
-                  </div>
-                </div>
+                  return (
+                    <>
+                      {/* Active Hotspot Warning Summary Bar */}
+                      {abnormalCount > 0 && (
+                        <div className="bg-amber-100/90 border border-amber-300 text-amber-900 rounded-lg px-3 py-2 text-xs flex items-center justify-between font-medium shadow-2xs">
+                          <span className="flex items-center gap-1.5 font-bold">
+                            <span className="w-2 h-2 rounded-full bg-amber-600 animate-ping"></span>
+                            ⚠️ Phát hiện {abnormalCount} điểm nóng dinh dưỡng vượt ngưỡng!
+                          </span>
+                          <span className="text-[10px] font-semibold text-amber-800">Cần điều chỉnh</span>
+                        </div>
+                      )}
 
-                {/* pH slider */}
-                <div className="flex flex-col gap-1.5 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-700 flex items-center gap-1">
-                      <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                      Độ pH Đất
-                    </span>
-                    <span className="font-mono font-bold text-emerald-700">{simulatedSensor.pH} pH</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="3.5"
-                    max="9.0"
-                    step="0.1"
-                    value={simulatedSensor.pH}
-                    onChange={(e) => setSimulatedSensor({ ...simulatedSensor, pH: parseFloat(e.target.value) })}
-                    className="w-full accent-emerald-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
-                  />
-                  <div className="flex justify-between text-[10px] text-slate-400">
-                    <span className={simulatedSensor.pH < 5.0 ? "text-red-500 font-bold" : "text-slate-400"}>
-                      {simulatedSensor.pH < 5.0 ? "⚠️ Chua Phèn Nặng!" : "Chua (Phèn)"}
-                    </span>
-                    <span>Tối ưu: 5.5 - 6.5</span>
-                    <span>Kiềm (Mặn)</span>
-                  </div>
-                </div>
+                      {/* Nitrogen */}
+                      <div className={`flex flex-col gap-1.5 p-3 rounded-xl border transition-all duration-300 ${nStatus.bg}`}>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
+                            Hàm lượng Nitơ (Đạm - N)
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${nStatus.badge}`}>
+                              {nStatus.label}
+                            </span>
+                            <span className="font-mono font-black text-blue-700 text-xs">{simulatedSensor.nitrogen} mg/kg</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="300"
+                          value={simulatedSensor.nitrogen}
+                          onChange={(e) => setSimulatedSensor({ ...simulatedSensor, nitrogen: parseInt(e.target.value) })}
+                          className="w-full accent-blue-600 h-1.5 bg-slate-200/80 rounded-lg cursor-pointer"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                          <span>Thiếu đạm (&lt;80)</span>
+                          <span className="font-bold text-slate-600">Chuẩn: 80 - 120 mg/kg</span>
+                          <span>Thừa đạm (&gt;120)</span>
+                        </div>
+                      </div>
 
-                {/* Moisture Slider */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1 bg-slate-50/50 p-2 rounded border border-slate-100">
-                    <label className="text-[11px] font-bold text-slate-500">Độ Ẩm Đất (%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={simulatedSensor.moisture}
-                      onChange={(e) => setSimulatedSensor({ ...simulatedSensor, moisture: Math.min(100, parseInt(e.target.value) || 0) })}
-                      className="bg-white border border-slate-200 rounded px-2 py-1 text-xs font-mono font-bold text-slate-800"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1 bg-slate-50/50 p-2 rounded border border-slate-100">
-                    <label className="text-[11px] font-bold text-slate-500">Độ dẫn điện EC (mS/cm)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0.1"
-                      max="3.0"
-                      value={simulatedSensor.ec}
-                      onChange={(e) => setSimulatedSensor({ ...simulatedSensor, ec: parseFloat(e.target.value) || 0.1 })}
-                      className="bg-white border border-slate-200 rounded px-2 py-1 text-xs font-mono font-bold text-slate-800"
-                    />
-                  </div>
-                </div>
+                      {/* Phosphorus */}
+                      <div className={`flex flex-col gap-1.5 p-3 rounded-xl border transition-all duration-300 ${pStatus.bg}`}>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 bg-purple-600 rounded-full"></span>
+                            Hàm lượng Phốt-pho (Lân - P)
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${pStatus.badge}`}>
+                              {pStatus.label}
+                            </span>
+                            <span className="font-mono font-black text-purple-700 text-xs">{simulatedSensor.phosphorus} mg/kg</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="150"
+                          value={simulatedSensor.phosphorus}
+                          onChange={(e) => setSimulatedSensor({ ...simulatedSensor, phosphorus: parseInt(e.target.value) })}
+                          className="w-full accent-purple-600 h-1.5 bg-slate-200/80 rounded-lg cursor-pointer"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                          <span>Nghèo Lân (&lt;30)</span>
+                          <span className="font-bold text-slate-600">Chuẩn: 30 - 50 mg/kg</span>
+                          <span>Dư thừa (&gt;50)</span>
+                        </div>
+                      </div>
+
+                      {/* Potassium */}
+                      <div className={`flex flex-col gap-1.5 p-3 rounded-xl border transition-all duration-300 ${kStatus.bg}`}>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+                            Hàm lượng Kali (K)
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${kStatus.badge}`}>
+                              {kStatus.label}
+                            </span>
+                            <span className="font-mono font-black text-amber-800 text-xs">{simulatedSensor.potassium} mg/kg</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="200"
+                          value={simulatedSensor.potassium}
+                          onChange={(e) => setSimulatedSensor({ ...simulatedSensor, potassium: parseInt(e.target.value) })}
+                          className="w-full accent-amber-600 h-1.5 bg-slate-200/80 rounded-lg cursor-pointer"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                          <span>Thiếu Kali (&lt;65)</span>
+                          <span className="font-bold text-slate-600">Chuẩn: 65 - 100 mg/kg</span>
+                          <span>Dư thừa (&gt;100)</span>
+                        </div>
+                      </div>
+
+                      {/* pH slider */}
+                      <div className={`flex flex-col gap-1.5 p-3 rounded-xl border transition-all duration-300 ${phStatus.bg}`}>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 bg-emerald-600 rounded-full"></span>
+                            Độ pH Đất
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${phStatus.badge}`}>
+                              {phStatus.label}
+                            </span>
+                            <span className="font-mono font-black text-emerald-800 text-xs">{simulatedSensor.pH} pH</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range"
+                          min="3.5"
+                          max="9.0"
+                          step="0.1"
+                          value={simulatedSensor.pH}
+                          onChange={(e) => setSimulatedSensor({ ...simulatedSensor, pH: parseFloat(e.target.value) })}
+                          className="w-full accent-emerald-600 h-1.5 bg-slate-200/80 rounded-lg cursor-pointer"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                          <span>Chua Phèn (&lt;5.5)</span>
+                          <span className="font-bold text-slate-600">Chuẩn: 5.5 - 6.5 pH</span>
+                          <span>Kiềm Mặn (&gt;6.5)</span>
+                        </div>
+                      </div>
+
+                      {/* Moisture & EC Grid */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className={`flex flex-col gap-1.5 p-2.5 rounded-xl border transition-all duration-300 ${moistureStatus.bg}`}>
+                          <div className="flex items-center justify-between text-[11px]">
+                            <label className="font-bold text-slate-800">Độ Ẩm Đất (%)</label>
+                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold border ${moistureStatus.badge}`}>
+                              {moistureStatus.label}
+                            </span>
+                          </div>
+                          <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={simulatedSensor.moisture}
+                            onChange={(e) => setSimulatedSensor({ ...simulatedSensor, moisture: Math.min(100, parseInt(e.target.value) || 0) })}
+                            className="bg-white/90 border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-mono font-black text-slate-800 shadow-2xs"
+                          />
+                        </div>
+
+                        <div className={`flex flex-col gap-1.5 p-2.5 rounded-xl border transition-all duration-300 ${ecStatus.bg}`}>
+                          <div className="flex items-center justify-between text-[11px]">
+                            <label className="font-bold text-slate-800">Độ dẫn EC (mS/cm)</label>
+                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold border ${ecStatus.badge}`}>
+                              {ecStatus.label}
+                            </span>
+                          </div>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0.1"
+                            max="3.0"
+                            value={simulatedSensor.ec}
+                            onChange={(e) => setSimulatedSensor({ ...simulatedSensor, ec: parseFloat(e.target.value) || 0.1 })}
+                            className="bg-white/90 border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-mono font-black text-slate-800 shadow-2xs"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
 
               </div>
 
