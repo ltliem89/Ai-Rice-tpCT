@@ -1,0 +1,6 @@
+{
+  "name": "AI-RICE - Hệ Thống AI Nhận Dạng Bệnh Lúa & Phân Tích Đất",
+  "description": "Giao diện trình bày tương tác giải pháp AI Rice phục vụ Ban Giám Khảo: nhận diện 11 bệnh lúa, tích hợp cảm biến đất 7 in 1, AI Fusion khuyến cáo, dữ liệu thực nghiệm 2000+ mẫu và kế hoạch kinh doanh.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
