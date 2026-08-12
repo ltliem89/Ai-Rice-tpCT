@@ -14,6 +14,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Blast",
     scientificName: "Pyricularia oryzae / Magnaporthe oryzae",
     category: "Bệnh do nấm",
+    definition: "Bệnh đạo ôn (Rice Blast) do nấm nấm Pyricularia oryzae gây ra. Đây là một trong những dịch bệnh phá hại nguy hiểm bậc nhất trên cây lúa tại Đồng bằng Sông Cửu Long, có khả năng tấn công tất cả các bộ phận từ lá, cổ lá, thân, cổ bông đến hạt lúa.",
+    identification: [
+      "Vết bệnh trên lá có dạng hình mắt én (hình thoi) đặc trưng: tâm màu xám trắng hoại tử, viền xung quanh màu nâu sẫm hay đỏ gạch.",
+      "Vết bệnh trên cổ bông làm hoại tử thâm đen bao quanh cổ giáp lá, làm cổ bông héo khô và gãy gục hoàn toàn.",
+      "Vết bệnh trên hạt làm vỏ hạt xuất hiện đốm nâu xám, hạt lúa bị lem lép đen."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 30% - 80% năng suất (mất trắng nếu bị đạo ôn cổ bông gãy gục)",
+      description: "Phá hủy diện tích quang hợp lá lúa, cắt đứt mạch dẫn nuôi bông lúa làm hạt không thể vào gạo, bông lúa bị lép đen và gãy rụi.",
+      impacts: [
+        "Cháy rụi toàn bộ bộ lá lúa (đạo ôn lá) làm suy kiệt sức sống cây lúa.",
+        "Gãy gục cổ bông (đạo ôn cổ bông) làm 100% hạt trên bông bị lép lửng.",
+        "Suy giảm chất lượng hạt gạo, tăng chi phí phun thuốc bảo vệ thực vật."
+      ]
+    },
     symptoms: [
       "Vết bệnh hình mắt én (hình thoi) có tâm màu xám trắng, viền sẫm màu.",
       "Xuất hiện các đốm nhỏ màu sẫm trên phiến lá, cổ bông, cuống hạt.",
@@ -46,6 +61,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Sheath Blight",
     scientificName: "Rhizoctonia solani",
     category: "Bệnh do nấm",
+    definition: "Bệnh đốm vằn (Khô vằn) do nấm Rhizoctonia solani gây ra. Bào tử nấm và hạch nấm tồn tại lâu năm trong đất, tấn công từ gầm gốc bẹ lá sát mặt nước rồi lan dần lên tầng lá trên.",
+    identification: [
+      "Vết bệnh dạng đốm vằn vèo như da hổ hoặc hình mây loang lổ màu xám xanh rồi chuyển xám trắng viền nâu.",
+      "Phát triển từ bẹ lá chân gốc sát mặt nước rồi lan rộng lên phiến lá đòng và bông lúa.",
+      "Xuất hiện các hạch nấm nhỏ dạng hạt màu trắng hoặc nâu bám trên bẹ lá bị bệnh."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 20% - 50% năng suất lúa",
+      description: "Thối mục bẹ lá khiến cây lúa bị gãy ngã rụi hàng loạt khi gặp mưa gió, hạt lúa bị lép lửng nặng.",
+      impacts: [
+        "Làm mục nát bẹ lá và thân lúa làm lúa đổ rạp diện rộng.",
+        "Giảm nghiêm trọng diện tích lá xanh quang hợp nuôi hạt.",
+        "Làm suy giảm phẩm cấp chất lượng hạt gạo sau thu hoạch."
+      ]
+    },
     symptoms: [
       "Vết bệnh dạng đốm vằn vèo như da hổ hoặc đốm mây màu xám xanh.",
       "Bắt đầu xuất hiện từ bẹ lá gần mặt nước rồi lan dần lên các lá phía trên.",
@@ -78,6 +108,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Bacterial Leaf Blight",
     scientificName: "Xanthomonas oryzae pv. oryzae",
     category: "Bệnh do vi khuẩn",
+    definition: "Bệnh bạc lá (Cháy bìa lá) do vi khuẩn Xanthomonas oryzae pv. oryzae gây ra. Vi khuẩn xâm nhập qua khí khổng hoặc vết rách lá do giông bão rồi nhân lên làm tắc nghẽn mạch dẫn dinh dưỡng.",
+    identification: [
+      "Vết bệnh phát triển từ chóp lá hoặc bìa lá thành các dải dài màu vàng nhạt rồi trắng xám ngả vàng đục.",
+      "Ranh giới giữa phần lá bị bệnh và phần khỏe có đường lượn sóng màu nâu đỏ rất rõ rệt.",
+      "Buổi sáng sớm xuất hiện các giọt keo vi khuẩn đục tròn nhỏ màu vàng óng bám trên vết bệnh."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 30% - 70% năng suất lúa",
+      description: "Làm cháy khô rụi lá đòng (lá nuôi bông), làm lúa trỗ lép nhiều, gãy bông, chất lượng gạo giảm sút nghiêm trọng.",
+      impacts: [
+        "Phá hủy hoàn toàn lá đòng - bộ lá quyết định 70% năng suất hạt lúa.",
+        "Hạt lúa bị lép lửng, gạo bị xốp gãy, màu xám đục.",
+        "Lây lan thần tốc sau các đợt mưa bão giông lốc ngoài đồng."
+      ]
+    },
     symptoms: [
       "Vết bệnh xuất hiện từ chóp lá hoặc mép lá thành dải màu vàng cam rồi trắng xám.",
       "Ranh giới giữa mép lá bị bệnh và phần lành có đường lượn sóng.",
@@ -110,6 +155,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Leaf Folder",
     scientificName: "Cnaphalocrocis medinalis",
     category: "Sâu hại / Côn trùng",
+    definition: "Sâu cuốn lá nhỏ (Cnaphalocrocis medinalis) là côn trùng sâu hại phổ biến. Sâu nhả tơ kết 2 mép lá lại thành ống dẹp và sống ẩn nấp bên trong để gặm nhấm phần diệp lục màu xanh.",
+    identification: [
+      "Lá lúa bị cuốn tròn dẹp dọc theo phiến lá.",
+      "Thịt lá bên trong ống cuốn bị gặm mất, để lại vệt biểu bì màu trắng sọc dài dọc theo gân lá.",
+      "Cánh đồng bị hại nhìn từ xa có màu bạc xám trắng."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 15% - 40% năng suất lúa",
+      description: "Làm mất bộ lá quang hợp, đặc biệt khi gây hại lá đòng làm lúa trỗ lép, hạt nhỏ lửng.",
+      impacts: [
+        "Mất diện tích quang hợp nghiêm trọng giai đoạn đẻ nhánh và làm đòng.",
+        "Hạt lúa kém mẩy, tỷ lệ hạt lép lửng tăng cao.",
+        "Cây lúa bị mất sức, mở đường cho nấm bệnh xâm nhập."
+      ]
+    },
     symptoms: [
       "Sâu nhả tơ cuốn 2 mép lá lại thành ống dẹp.",
       "Sâu nằm bên trong nhai ăn phần thịt lá màu xanh, để lại biểu bì màu trắng dọc lá.",
@@ -141,6 +201,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Armyworm / Leaf Caterpillar",
     scientificName: "Spodoptera litura / Dicladispa armigera",
     category: "Sâu hại / Côn trùng",
+    definition: "Nhóm sâu ăn lá bao gồm Sâu gai và Sâu keo/Sâu khấu cắn phá phiến lá lúa trực tiếp. Bộc phát nhanh khi thời tiết nắng mưa thất thường.",
+    identification: [
+      "Mép lá lúa bị cắn khuyết nham nhở hoặc cắn đứt ngang phiến lá.",
+      "Hạt phân sâu màu đen đùn ra dưới gốc lúa.",
+      "Bọ gai màu đen hoặc sâu xám bò trực tiếp trên phiến lá."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 20% - 60% năng suất lúa",
+      description: "Ăn trụi toàn bộ bộ lá lúa trên cánh đồng, khiến cây lúa không còn khả năng quang hợp và suy kiệt.",
+      impacts: [
+        "Có thể ăn trơ trụi gân lá trong thời gian rất ngắn.",
+        "Cây lúa ngưng sinh trưởng hoàn toàn.",
+        "Mất năng suất trầm trọng nếu bị tấn công giai đoạn lúa non đẻ nhánh."
+      ]
+    },
     symptoms: [
       "Mép lá lúa bị cắn khuyết nham nhở hoặc bị cắn đứt ngang phiến lá.",
       "Xuất hiện phân sâu màu đen rải rác dưới gốc lúa.",
@@ -171,6 +246,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Organic Acid Toxicity / Root Rot",
     scientificName: "Abiotic Toxicity",
     category: "Sinh lý / Môi trường",
+    definition: "Bệnh ngộ độc hữu cơ là rối loạn sinh lý phi sinh học (Abiotic Disease). Xảy ra khi vùi rơm rạ tươi của vụ trước rồi ngâm nước làm rơm rạ phân hủy yếm khí sinh ra độc khí (H2S, CH4) và axit hữu cơ làm thối rễ lúa.",
+    identification: [
+      "Cây lúa ngưng phát triển, toàn bộ lá bị ngả màu vàng xám từ chóp lá lan xuống.",
+      "Bộ rễ lúa bị thối đen, có mùi hôi chua nồng đậm, không có rễ trắng lông hút.",
+      "Rễ lúa bị mềm nhũn, nhổ cây lên rất dễ dàng và cây không đẻ nhánh."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 30% - 70% năng suất lúa",
+      description: "Làm hư hỏng toàn bộ hệ thống rễ lúa, làm cây không thể hút nước và khoáng chất dẫn đến chết héo.",
+      impacts: [
+        "Rễ thối đen làm mất khả năng hút dinh dưỡng đạm, lân, kali.",
+        "Cây lúa cằn cỗi, không đẻ nhánh, bạt bụi vàng rụi.",
+        "Dễ dẫn đến nhiễm trùng thứ cấp do nấm và vi khuẩn tấn công."
+      ]
+    },
     symptoms: [
       "Lúa bị ngưng phát triển, lá chuyển màu vàng xám từ chóp xuống.",
       "Rễ lúa bị thối đen, có mùi hôi chua nồng, rễ không còn lông hút trắng.",
@@ -202,6 +292,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Grassy Stunt Virus",
     scientificName: "Rice Grassy Stunt Virus (RGSV)",
     category: "Bệnh do virus",
+    definition: "Bệnh Lùn cỏ (Vàng lùn) do virus Rice Grassy Stunt Virus (RGSV) gây ra, lây truyền duy nhất qua vật trung gian là Rầy Nâu (Nilaparvata lugens). Phá hủy hoàn toàn khả năng trỗ bông của lúa.",
+    identification: [
+      "Cây lúa bị lùn rất nặng, đẻ nhiều nhánh nhỏ mọc xoè rộng như bụi cỏ dại.",
+      "Lá lúa ngắn, hẹp, màu xanh vàng hoặc vàng nhạt có đốm nâu gỉ sắt rải rác.",
+      "Bụi lúa bệnh hoàn toàn không trỗ bông được hoặc bông bị lép 100%."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 70% - 100% (mất trắng toàn bộ vùng bùng phát dịch)",
+      description: "Cây lúa bị biến dạng sinh học, còi cọc như cỏ dại và không thu hoạch được hạt gạo nào.",
+      impacts: [
+        "Mất trắng năng suất lúa hoàn toàn tại các ổ dịch.",
+        "Lây lan diện rộng cực kỳ nhanh chóng theo mật độ rầy nâu di trú.",
+        "Không có thuốc hóa học đặc trị virus."
+      ]
+    },
     symptoms: [
       "Cây lúa bị lùn nặng, đẻ rất nhiều nhánh nhỏ mọc xoè rộng như bụi cỏ.",
       "Lá lúa ngắn, hẹp, màu xanh vàng hoặc xám nhạt, có đốm nâu rải rác.",
@@ -232,6 +337,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Stem Borer",
     scientificName: "Scirpophaga incertulas",
     category: "Sâu hại / Côn trùng",
+    definition: "Sâu đục thân bướm 2 chấm (Scirpophaga incertulas) là loài sâu hại đục bẹ xâm nhập vào bên trong thân lúa cắn đứt mạch dẫn dinh dưỡng và nước nuôi cây.",
+    identification: [
+      "Giai đoạn lúa đẻ nhánh: dọt lá non bên trong bị héo khô, rút ra dễ dàng (dọt héo).",
+      "Giai đoạn lúa trỗ: bông lúa trỗ ra có màu trắng bạc, đứng thẳng lép hạt 100% (bông bạc).",
+      "Thân lúa bị đục có lỗ nhỏ và dính phân sâu dạng mùn cưa."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 30% - 70% năng suất lúa",
+      description: "Mỗi bông lúa bị sâu đục thân cắn làm bông bạc là mất hoàn toàn 100% năng suất của bông lúa đó.",
+      impacts: [
+        "Gây hiện tượng dọt héo giai đoạn đẻ nhánh.",
+        "Gây hiện tượng bông bạc thẳng đứng giai đoạn trỗ.",
+        "Mất trắng sản lượng của các bông lúa bị đục thân."
+      ]
+    },
     symptoms: [
       "Giai đoạn đẻ nhánh: sâu cắn đứt gốc mầm làm héo dọt lá non (dọt héo).",
       "Giai đoạn trỗ: sâu đục bẹ vào thân cắn đứt mạch dẫn làm bông lúa bị bạc trắng hoàn toàn (bông bạc).",
@@ -262,6 +382,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Grasshopper Damage",
     scientificName: "Oxya chinensis",
     category: "Sâu hại / Côn trùng",
+    definition: "Châu chấu lúa (Oxya chinensis) là côn trùng đa thực sử dụng bộ hàm khỏe cắn thủng rách phiến lá lúa, làm mất diện tích diệp lục của lá.",
+    identification: [
+      "Lá lúa bị cắn thủng từng lỗ lớn bất định hình rải rác.",
+      "Mép lá lúa bị cắn nham nhở khuyết hình dợn sóng.",
+      "Côn trùng nhảy rộn rã khi di chuyển qua các rãnh lúa."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 10% - 30% năng suất lúa",
+      description: "Suy giảm khả năng quang hợp và tạo điều kiện cho vi khuẩn xâm nhập qua vết thương hở.",
+      impacts: [
+        "Giảm diện tích lá xanh tổng hợp diệp lục.",
+        "Mở đường cho nấm và vi khuẩn xâm nhập gây bệnh thứ cấp.",
+        "Tăng chi phí quản lý dịch hại."
+      ]
+    },
     symptoms: [
       "Lá lúa bị cắn thủng từng lỗ lớn rải rác hoặc khuyết mép hình dợn sóng.",
       "Quan sát thấy côn trùng nhảy rộn rã khi đi qua rãnh ruộng."
@@ -274,7 +409,7 @@ export const RICE_DISEASES: DiseaseItem[] = [
       ec: "0.45 mS/cm"
     },
     treatment: [
-      "Phát quang bờ dại ven ruộng.",
+      "Phat quang bờ dại ven ruộng.",
       "Phun xịt xua đuổi bằng tinh dầu neem hoặc thuốc trừ sâu tiếp xúc."
     ],
     preventiveMeasures: [
@@ -291,6 +426,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Bacterial Leaf Streak",
     scientificName: "Xanthomonas oryzae pv. oryzicola",
     category: "Bệnh do vi khuẩn",
+    definition: "Bệnh sọc vi khuẩn do Xanthomonas oryzae pv. oryzicola gây ra. Vi khuẩn phát triển theo các mạch gân lá sinh ra dải sọc màu nâu vàng kéo dài.",
+    identification: [
+      "Dải sọc ngắn hẹp màu nâu ngả vàng chạy dọc theo gân lá.",
+      "Soi phiến lá trước ánh sáng thấy vệt bệnh mờ trong suốt hẹp theo gân.",
+      "Lá lúa bị cháy khô từng mảng lớn màu nâu xám."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 20% - 50% năng suất lúa",
+      description: "Cháy khô từng mảng lá lúa, cản trở quang hợp và hạt lúa bị biến màu xấu gạo.",
+      impacts: [
+        "Làm cháy khô các phiến lá trên tầng mặt.",
+        "Hạt lúa kém mẩy, lúa bị lem lép hạt.",
+        "Chất lượng gạo thương phẩm suy giảm."
+      ]
+    },
     symptoms: [
       "Các dải sọc ngắn hẹp màu nâu ngả vàng chạy dọc giữa các gân lá.",
       "Khi soi trước ánh sáng thấy vệt bệnh mờ trong suốt hẹp theo gân lá.",
@@ -321,6 +471,21 @@ export const RICE_DISEASES: DiseaseItem[] = [
     englishName: "Rice Tungro Virus",
     scientificName: "Rice Tungro Bacilliform Virus (RTBV)",
     category: "Bệnh do virus",
+    definition: "Bệnh Tungro là bệnh virus phức hợp do Rice Tungro Bacilliform Virus (RTBV) gây ra, lây truyền môi giới qua Rầy Xanh đuôi đen (Nephotettix virescens).",
+    identification: [
+      "Lá lúa biến đổi màu từ xanh sang vàng cam hay da cam từ chóp lá lan xuống.",
+      "Cây lúa bị lùn nhẹ, đẻ nhánh kém, rễ còi cọc.",
+      "Bông lúa nhỏ, trỗ không thoát và hạt lép có đốm nâu."
+    ],
+    harmfulEffects: {
+      yieldLoss: "Thất thu 40% - 80% năng suất lúa",
+      description: "Suy nhược cây lúa toàn diện, làm bông lúa trỗ không thoát và lép hạt nặng.",
+      impacts: [
+        "Lá lúa chuyển vàng cam cản trở diệp lục tố.",
+        "Cây lúa bị lùn cọc kiệt sức.",
+        "Lây lan nhanh theo di trú của rầy xanh."
+      ]
+    },
     symptoms: [
       "Lá lúa biến đổi màu từ xanh sang vàng cam hay da cam từ chóp lá lan xuống.",
       "Cây lúa bị lùn nhẹ, đẻ nhánh kém, rễ còi cọc.",
@@ -421,148 +586,145 @@ export const PROTOTYPE_STAGES: PrototypeStage[] = [
 export const PRESENTATION_SLIDES: PresentationSlide[] = [
   {
     id: 1,
-    title: "HỆ THỐNG KẾT HỢP AI NHẬN DẠNG BỆNH LÚA VÀ PHÂN TÍCH ĐẤT TRỒNG THEO THỜI GIAN THỰC TRÊN WEB DI ĐỘNG",
-    subtitle: "Dự án Super Rice / AI Rice - Cuộc thi Sáng Tạo Thanh Thiếu Niên Nhi Đồng TP. Cần Thơ",
+    title: "HỆ THỐNG KẾT HỢP AI NHẬN DIỆN BỆNH LÚA VÀ THEO DÕI ĐẤT TRỒNG THEO THỜI GIAN THỰC TRÊN WEB DI ĐỘNG",
+    subtitle: "SUPER RICE - Dự án Khoa Học Kỹ Thuật / Sáng Tạo Thanh Thiếu Niên Nhi Đồng TP. Cần Thơ",
     category: "Tổng quan",
-    summaryText: "Trình bày tổng quan về giải pháp công nghệ tích hợp AI và IoT đột phá dành cho ngành trồng lúa Việt Nam.",
-    speakerScript: "Kính chào Ban Giám Khảo! Em xin đại diện nhóm tác giả trường PTDTNT THCS Him Lam trình bày dự án 'Hệ thống kết hợp AI nhận dạng bệnh lúa và phân tích đất trồng theo thời gian thực trên Web di động'.",
+    summaryText: "Slide mở đầu giới thiệu tên đề tài nghiên cứu, nhóm tác giả học sinh trường Him Lam và GVHD.",
+    speakerScript: "Kính chào Ban Giám Khảo! Em xin đại diện nhóm trình bày dự án 'Hệ thống kết hợp AI nhận diện bệnh lúa và theo dõi đất trồng theo thời gian thực trên Web di động' - Đề tài mang tên SUPER RICE nhằm nâng cao hiệu quả canh tác lúa tại TP. Cần Thơ và cả nước.",
     bulletPoints: [
-      "Sản phẩm: SUPER RICE (AI-RICE)",
-      "Lĩnh vực: Bảo vệ môi trường, ứng phó biến đổi khí hậu & phát triển kinh tế",
-      "Nhóm tác giả: Bảo Ngân, Tường Vy, Giang Ngân, Nhựt Quỳnh (Trường Him Lam, Cần Thơ)",
-      "Giáo viên hướng dẫn: Thầy Lê Thanh Liêm"
+      "Nhóm tác giả: Học sinh trường PTDTNT THCS Him Lam, huyện Châu Thành, TP. Cần Thơ.",
+      "Giáo viên hướng dẫn: Thầy Lê Thanh Liêm.",
+      "Sứ mệnh dự án: Đưa chuyển đổi số và công nghệ AI/IoT thông minh ra đồng ruộng lúa dã chiến."
     ],
     diagramType: "architecture"
   },
   {
     id: 2,
-    title: "LÝ DO CHỌN ĐỀ TÀI & VẤN ĐỀ THỰC TẾ",
+    title: "VẤN ĐỀ THỰC TẾ & KHẢO SÁT THỰC ĐỊA RUỘNG LÚA CẦN THƠ",
     category: "Vấn đề & Khảo sát",
-    summaryText: "Người trồng lúa đối mặt khó khăn lớn trong chẩn đoán dịch bệnh và theo dõi chất lượng đất ruộng.",
-    speakerScript: "Qua khảo sát thực tế tại ruộng lúa Cần Thơ, bà con chủ yếu quan sát bệnh bằng mắt thường. Tuy nhiên, nhiều bệnh có triệu chứng giống hệt hiện tượng thiếu dinh dưỡng, dẫn đến chẩn đoán sai và xịt thuốc lãng phí.",
+    summaryText: "Khảo sát thực tế khó khăn của bà con trồng lúa khi chẩn đoán bệnh bằng mắt thường và bón phân theo cảm tính.",
+    speakerScript: "Qua khảo sát thực địa tại các ruộng lúa Cần Thơ, chúng em thấy bà con gặp rất nhiều khó khăn do sâu bệnh hại phức tạp và thiếu phương tiện đo chất đất định lượng. Việc quan sát bằng mắt thường dễ nhầm lẫn dẫn đến bón sai phân, xịt sai thuốc, hại đất nước và giảm năng suất.",
     bulletPoints: [
-      "THỰC TẾ: Sâu bệnh diễn biến phức tạp, rất khó phát hiện sớm.",
-      "VẤN ĐỀ: Hai bệnh triệu chứng giống nhau -> Nhầm lẫn bón phân/xịt thuốc.",
-      "TRA CỨU INTERNET: Thông tin không chính xác so với đồng ruộng thực tế.",
-      "HỎI CHUYÊN GIA: Phụ thuộc thời gian phản hồi, trễ đợt dập dịch.",
-      "HẬU QUẢ: Giảm năng suất lúa, tăng chi phí sản xuất, ô nhiễm môi trường."
+      "Khó khăn của bà con: Bệnh lúa phát triển nhanh, khó phân biệt các triệu chứng tương tự bằng mắt thường.",
+      "Hậu quả bón phân cảm tính: Thừa đạm làm bùng phát dịch đạo ôn, lúa lửng hạt, tăng chi phí thuốc BVTV.",
+      "Nhu cầu thực tiễn: Cần một công cụ di động nhận diện bệnh nhanh và đo chính xác chỉ số đất NPK."
     ],
     diagramType: "survey"
   },
   {
     id: 3,
-    title: "NGHIÊN CỨU TỔNG QUAN & KHOẢNG TRỐNG KHOA HỌC (TLI-YOLO)",
+    title: "NGHIÊN CỨU TỔNG QUAN: MÔ HÌNH TLI-YOLO",
+    subtitle: "Li và cộng sự (2025) – Tạp chí Sensors (MDPI)",
     category: "Nghiên cứu & Khoảng trống",
-    summaryText: "Đánh giá các nghiên cứu quốc tế xuất sắc (TLI-YOLO - Li et al. 2025 trên Tạp chí Sensors MDPI).",
-    speakerScript: "Nghiên cứu TLI-YOLO đạt độ chính xác 93.1%, mAP 95% nhưng có khoảng trống lớn: Chưa tích hợp chỉ số môi trường đất và chưa hỗ trợ cảnh báo sớm toàn diện.",
+    summaryText: "Đánh giá mô hình TLI-YOLO hiện đại trên thế giới và khoảng trống nghiên cứu chưa tích hợp cảm biến đất.",
+    speakerScript: "Chúng em nghiên cứu đề tài TLI-YOLO công bố năm 2025 đạt độ chính xác 93.1%, mAP 95%, tuy nhiên mô hình này vẫn còn khoảng trống lớn: Chưa tích hợp các thông số môi trường đất và hỗ trợ cảnh báo sớm toàn diện.",
     bulletPoints: [
-      "Mô hình TLI-YOLO (2025): Độ chính xác 93.1%, mAP 95%, F1-score 90.48%.",
-      "KHOẢNG TRỐNG: Chỉ nhận diện hình ảnh thuần túy, chưa có cảm biến theo dõi môi trường đất.",
-      "CHƯA HỖ TRỢ: Cảnh báo sớm nguy cơ bùng phát dịch bệnh từ các chỉ số thổ nhưỡng."
+      "Mô hình TLI-YOLO (2025): Đạt độ chính xác 93.1% precision, 88% recall, 95% mAP, và 90.48% F1 score.",
+      "Ưu điểm: Tương thích tốt trên thiết bị di động với tốc độ xử lý nhanh.",
+      "KHOẢNG TRỐNG: Chưa tích hợp các thông số môi trường đất trồng, chưa hỗ trợ cảnh báo sớm và giám sát sức khỏe cây lúa một cách toàn diện."
     ],
     diagramType: "comparison"
   },
   {
     id: 4,
-    title: "NGHIÊN CỨU TỔNG QUAN (Inception V3 & CNN)",
+    title: "NGHIÊN CỨU TỔNG QUAN: MÔ HÌNH INCEPTION V3",
+    subtitle: "Nguyễn Thái Nghe (2022) – Tạp chí Khoa học Trường Đại học Cần Thơ",
     category: "Nghiên cứu & Khoảng trống",
-    summaryText: "Phân tích các mô hình AI trong nước (Trường ĐH Cần Thơ, ĐH Hồng Đức).",
-    speakerScript: "Mô hình Inception V3 đạt 97.4% trên 2.500 ảnh nhưng số loại bệnh nhận diện còn ít và chưa khoanh vùng vị trí vết bệnh trên lá.",
+    summaryText: "Đánh giá nghiên cứu nhận dạng bệnh lá lúa bằng phương pháp học chuyển giao tại Việt Nam.",
+    speakerScript: "Tại Việt Nam, nghiên cứu Inception V3 năm 2022 của ĐH Cần Thơ đạt độ chính xác 97.4% trên 2.500 ảnh lúa, nhưng số lượng bệnh nhận dạng còn ít và chưa định vị vết bệnh trên lá.",
     bulletPoints: [
-      "Nghiên cứu Inception V3 (ĐH Cần Thơ 2022): Đạt độ chính xác 97.4%.",
-      "Khoảng trống 1: Số lượng bệnh lúa nhận diện còn ít (chỉ 4 bệnh phổ biến).",
-      "Khoảng trống 2: Chưa tích hợp theo dõi pH, EC, NPK đất để đưa ra khuyến cáo nông nghiệp."
+      "Mô hình Inception V3: Chạy thực nghiệm trên 2.500 hình ảnh lá lúa, đạt độ chính xác 97.4%.",
+      "KHOẢNG TRỐNG: Số lượng loại bệnh nhận diện còn hạn chế, chưa chỉ ra được vị trí chính xác của vết bệnh trên phiến lá."
     ],
     diagramType: "comparison"
   },
   {
     id: 5,
-    title: "BẢNG KẾT HỢP KHOẢNG TRỐNG GIAO THOA CÁC GIẢI PHÁP",
+    title: "NGHIÊN CỨU TỔNG QUAN: MÔ HÌNH CNN PHÂN LOẠI",
+    subtitle: "Nguyễn Đình Công (2022) – Tạp chí Khoa học Trường Đại học Hồng Đức",
     category: "Nghiên cứu & Khoảng trống",
-    summaryText: "So sánh tổng hợp giữa Plantix, NextFarm AI, CNN+OpenCV và AI-RICE.",
-    speakerScript: "Từ việc phân tích khoảng trống giao thoa, nhóm chúng em xác định mục tiêu đột phá: Nhận diện đa dạng 11 loại bệnh lúa và TÍCH HỢP ĐỒNG BỘ chỉ số môi trường đất.",
+    summaryText: "Phân tích so sánh các kiến trúc CNN trên di động phân loại bệnh hại lúa.",
+    speakerScript: "Nghiên cứu năm 2022 của tác giả Nguyễn Đình Công đề xuất mô hình CNN gọn nhẹ chỉ 0.8 triệu tham số đạt 99.21% chính xác, tuy nhiên vẫn chưa tích hợp các yếu tố đất đai.",
     bulletPoints: [
-      "Plantix: Nhận diện qua ảnh nhưng KHÔNG theo dõi môi trường đất.",
-      "NextFarm AI: Chẩn đoán nhanh nhưng CHƯA chuyên sâu cho cây lúa.",
-      "CNN + OpenCV: Phát hiện bệnh nhưng CHƯA cập nhật nhiều chủng bệnh.",
-      "-> ĐỘT PHÁ CỦA AI-RICE: Nhận diện 11 chủng bệnh + Tích hợp 7 thông số cảm biến đất 7-in-1!"
+      "So sánh kiến trúc: DenseNet201 (99.65%), MobileNetv3 (91.3%), SimpleCNN (75.1%), Mô hình đề xuất (99.21% chính xác với 0.8M tham số).",
+      "KHOẢNG TRỐNG: Chưa hỗ trợ theo dõi các yếu tố môi trường thổ nhưỡng, chưa đưa ra cảnh báo sớm nguy cơ phát sinh dịch hại."
     ],
     diagramType: "comparison"
   },
   {
     id: 6,
-    title: "TÍNH MỚI VÀ TÍNH SÁNG TẠO CỦA SẢN PHẨM AI-RICE",
-    category: "Tính mới & Nguyên lý",
-    summaryText: "Tích hợp AI nhận diện 11 bệnh lúa với 7 chỉ số cảm biến đất trồng thời gian thực.",
-    speakerScript: "Điểm mới nổi bật nhất của AI-RICE là thuật toán hợp nhất AI Fusion: Kết hợp ảnh lá lúa với N, P, K, pH, EC, Nhiệt độ và Độ ẩm đất.",
+    title: "SO SÁNH CÁC GIẢI PHÁP & KHOẢNG TRỐNG KHOA HỌC GIAO THOA",
+    category: "Nghiên cứu & Khoảng trống",
+    summaryText: "Phân tích so sánh chi tiết giữa Plantix, NextFarm AI, CNN+OpenCV và định vị khoảng trống đột phá của AI-RICE.",
+    speakerScript: "Từ việc phân tích khoảng trống khoa học giao thoa, nhóm nhận thấy các giải pháp hiện tại như Plantix hay NextFarm AI hoặc không theo dõi đất, hoặc chưa chuyên sâu cho lúa. AI-RICE ra đời để lấp đầy khoảng trống này.",
     bulletPoints: [
-      "11 Loại Bệnh & Sâu Hại: Bạc lá, Đạo ôn, Đốm vằn, Lùn cỏ, Tungro, Sọc vi khuẩn, Sâu cuốn lá, Sâu ăn lá, Sâu đục thân, Ngộ độc hữu cơ, Châu chấu.",
-      "7 Chỉ số Cảm biến Đất: Độ ẩm, Nhiệt độ, pH, EC, Nitơ (N), Photpho (P), Kali (K).",
-      "Nền tảng Web Di Động: Dùng trực tiếp trên điện thoại, không cần cài ứng dụng.",
-      "Bộ dữ liệu tự chụp thực địa: Huấn luyện YOLOv8 trên Google Colab & Roboflow AI."
+      "Plantix: Nhận diện bệnh qua ảnh tốt, dễ dùng trên di động nhưng KHÔNG theo dõi môi trường đất.",
+      "NextFarm AI: Chẩn đoán nhanh, hỗ trợ xử lý kịp thời nhưng CHƯA chuyên sâu riêng cho cây lúa.",
+      "CNN + OpenCV: Hỗ trợ chẩn đoán và phát hiện bệnh nhưng CHƯA cập nhật nhiều chủng bệnh mới.",
+      "KHOẢNG TRỐNG KHOA HỌC GIAO THOA: Số lượng bệnh lúa nhận diện còn hạn chế, CHƯA TÍCH HỢP ĐỒNG THỜI thông số môi trường đất trồng lúa."
     ],
-    diagramType: "architecture"
+    diagramType: "comparison"
   },
   {
     id: 7,
-    title: "SƠ ĐỒ NGUYÊN LÝ HOẠT ĐỘNG TOÀN DIỆN",
+    title: "TÍNH MỚI, TÍNH SÁNG TẠO ĐỘT PHÁ CỦA SẢN PHẨM",
     category: "Tính mới & Nguyên lý",
-    summaryText: "Sơ đồ kiến trúc kết nối giữa Smartphone, Cảm biến 7-in-1, ESP32-S3, Máy tính AI Trung tâm và Web UI.",
-    speakerScript: "Nguyên lý hoạt động gồm 2 luồng song song: Cảm biến 7 in 1 truyền RS485 qua ESP32-S3 gửi về server; Điện thoại chụp ảnh gửi về AI Server để hợp nhất dữ liệu.",
+    summaryText: "Sự kết hợp hoàn hảo giữa mô hình AI nhận diện 11 bệnh lúa và đo đạc 7 thông số chất đất.",
+    speakerScript: "Sản phẩm của chúng em sở hữu tính mới vượt trội: Mô hình AI nhận dạng rõ 11 loại bệnh hại phổ biến cùng cảm biến 7 trong 1 đo chính xác NPK, pH, EC, nhiệt ẩm đất đai.",
     bulletPoints: [
-      "Cảm biến 7 in 1 -> RS485 -> Mạch chuyển UART -> Vi điều khiển ESP32-S3.",
-      "ESP32-S3 đẩy dữ liệu đất qua WiFi/4G lên AI Server.",
-      "Smartphone chụp ảnh lá lúa đẩy lên Server xử lý YOLOv8 & Gemini AI Fusion.",
-      "Kết quả hiển thị đồng thời lên Web Di Động và Màn hình TFT 1.8 inch tại hộp cảm biến."
+      "MÔ HÌNH AI: Nhận diện 11 loại dịch hại (Bạc lá, Sâu ăn lá, Châu chấu, Lùn cỏ, Sâu cuốn lá, Ngộ độc hữu cơ, Đạo ôn, Đốm vằn, Sâu đục thân, Sọc vi khuẩn, Tungro).",
+      "CẢM BIẾN ĐẤT 7-IN-1: Đo đạc thời gian thực Độ ẩm, Nhiệt độ, pH, EC, Nitơ (N), Photpho (P), Kali (K).",
+      "PHÂN TÍCH TỔNG HỢP: Hợp nhất dữ liệu hình ảnh bệnh và 7 chỉ số đất để đưa ra khuyến cáo phân bón, thuốc trị bệnh chính xác và khoa học nhất."
     ],
     diagramType: "architecture"
   },
   {
     id: 8,
-    title: "MẪU THỬ BẰNG ĐẦU - CÁNH TAY ROBOT (7/9/2025 - 19/11/2025)",
-    category: "Mẫu thử phát triển",
-    summaryText: "Giai đoạn 1: Thiết kế mô hình Cánh tay Robot xoay quét ảnh tự động.",
-    speakerScript: "Mẫu thử đầu tiên nhóm thiết kế cánh tay robot quét ảnh tự động. Mặc dù tự động hóa tốt nhưng diện tích quét quá nhỏ và chi phí cơ khí cao.",
+    title: "CẤU TẠO PHẦN CỨNG THIẾT BỊ ĐO ĐẤT AI-RICE",
+    category: "Tính mới & Nguyên lý",
+    summaryText: "Chi tiết thiết kế phần cứng gồm vi điều khiển ESP32-S3 và cảm biến 7 chỉ số đất.",
+    speakerScript: "Mạch phần cứng được thiết kế nhỏ gọn, sử dụng vi điều khiển ESP32-S3 hiệu năng cao, tích hợp sạc pin Lithium và đầu đo 7-in-1 cực bền ngoài đồng ruộng.",
     bulletPoints: [
-      "Ưu điểm: Tự động xoay chụp ảnh phân tích.",
-      "Nhược điểm: Diện tích quét hẹp, dễ rung lắc theo thời tiết, chi phí cao."
+      "Vi điều khiển chính: ESP32-S3 hỗ trợ WiFi/Bluetooth truyền tải dữ liệu tức thì.",
+      "Nguồn điện dã chiến: Sử dụng Pin Lithium 18650 tích hợp mạch sạc và bảo vệ pin tự động.",
+      "Màn hình thực địa: Màn hình màu TFT 1.8 inch hiển thị nhanh kết quả đo đạc tại chỗ không cần điện thoại."
     ],
-    diagramType: "prototype"
+    diagramType: "architecture"
   },
   {
     id: 9,
-    title: "MẪU THỬ THỨ HAI - WEB CAMERA AI (21/11/2025 - 18/12/2025)",
-    category: "Mẫu thử phát triển",
-    summaryText: "Giai đoạn 2: Phát triển ứng dụng Web AI di động (Đạt Giải Nhì Cuộc Thi KH-KT Cấp Thành Phố).",
-    speakerScript: "Nhóm chuyển sang giao diện Web di động cho nông dân chụp trực tiếp. Mẫu thử này xuất sắc đạt Giải Nhì Cuộc thi Khoa học Kỹ thuật Thành phố Cần Thơ!",
+    title: "MÔ HÌNH AI NHẬN DIỆN 11 LOẠI DỊCH HẠI",
+    category: "Tính mới & Nguyên lý",
+    summaryText: "Mô hình học máy Deep Learning tối ưu nhận diện chuẩn xác 11 đối tượng lúa.",
+    speakerScript: "Mô hình AI nhận diện của chúng em hỗ trợ nhận biết 11 dịch hại chính: từ đạo ôn, đốm vằn, bạc lá cho đến các loại sâu hại, châu chấu phá hoại.",
     bulletPoints: [
-      "Ưu điểm: Tiện lợi, chạy mượt trên mọi điện thoại không cần cài app.",
-      "Thành tựu: ĐẠT GIẢI NHÌ CUỘC THI KH-KT CẤP THÀNH PHỐ CẦN THƠ!",
-      "Nhược điểm: Chưa phân biệt được giữa bệnh hại và hiện tượng thiếu dinh dưỡng đất."
+      "Công nghệ cốt lõi: Mô hình mạng YOLOv8/TLI-YOLO được huấn luyện chuyên biệt cho lúa.",
+      "Độ chính xác vượt trội: Nhận diện khoanh vùng tức thì với mAP đạt trên 90%.",
+      "Khả năng mở rộng: Dễ dàng cập nhật thêm các chủng bệnh và sâu hại mới xuất hiện."
     ],
-    diagramType: "prototype"
+    diagramType: "architecture"
   },
   {
     id: 10,
-    title: "SẢN PHẨM HIỆN TẠI - KẾT HỢP AI CAMERA & TRỤ CẢM BIẾN (01/5/2026 - HIỆN TẠI)",
-    category: "Mẫu thử phát triển",
-    summaryText: "Giai đoạn 3: Hoàn thiện sản phẩm trụ cảm biến 7-in-1 kết hợp Web AI Fusion.",
-    speakerScript: "Sản phẩm hiện tại đã khắc phục hoàn toàn nhược điểm: Trụ cảm biến tripod cắm đất đồng bộ tức thời với Web AI, đưa ra khuyến cáo chính xác 90-95%.",
+    title: "QUY TRÌNH HOẠT ĐỘNG PHỐI HỢP AI FUSION",
+    category: "Tính mới & Nguyên lý",
+    summaryText: "Cơ chế Fusion kết hợp kết quả chẩn đoán hình ảnh với dữ liệu thổ nhưỡng NPK.",
+    speakerScript: "Đặc biệt, hệ thống sử dụng thuật toán AI Fusion: kết hợp kết quả chẩn đoán từ ảnh lá lúa với nồng độ NPK, pH thực tế để đưa ra khuyến cáo phân bón chính xác nhất.",
     bulletPoints: [
-      "Hợp nhất AI Ảnh + Cảm biến đất 7 chỉ số.",
-      "Màn hình TFT 1.8 inch xem chỉ số ngay tại ruộng.",
-      "Khuyến cáo AI Fusion phân tích chiều sâu sinh học thổ nhưỡng."
+      "Hợp nhất dữ liệu: Ảnh chụp lá lúa + Độ ẩm, Nhiệt độ, pH, EC, N-P-K của đất trồng.",
+      "Chẩn đoán kép: Loại trừ trường hợp vàng lá do sinh lý (thiếu NPK) với bệnh hại thực tế.",
+      "Khuyến cáo thông minh: Đưa ra công thức bón phân và xịt thuốc BVTV theo đúng nhu cầu thực tế."
     ],
-    diagramType: "prototype"
+    diagramType: "architecture"
   },
   {
     id: 11,
-    title: "CÁCH SỬ DỤNG VẬN HÀNH TRÊN WEB DI ĐỘNG",
+    title: "CÁCH SỬ DỤNG PHẦN MỀM DI ĐỘNG NHẬN DIỆN BỆNH LÚA",
     category: "Tính mới & Nguyên lý",
-    summaryText: "Quy trình 3 bước sử dụng Web di động nhận diện bệnh lúa trực quan.",
-    speakerScript: "Nông dân chỉ cần 3 bước đơn giản: BƯỚC 1 Mở link web di động -> BƯỚC 2 Chụp ảnh lá lúa -> BƯỚC 3 Nhận kết quả tên bệnh và tỷ lệ % tin cậy ngay sau 1-3 giây.",
+    summaryText: "Quy trình 3 bước sử dụng phần mềm trên di động đơn giản cho bà con nông dân.",
+    speakerScript: "Đầu tiên, cách sử dụng phần mềm di động AI-RICE cực kỳ đơn giản cho bà con nông dân: BƯỚC 1: Truy cập web hệ thống. BƯỚC 2: Chụp ảnh lá lúa bị bệnh. BƯỚC 3: Nhận ngay chẩn đoán trong 1-3 giây.",
     bulletPoints: [
-      "Bước 1: Mở link hệ thống trên điện thoại.",
+      "Bước 1: Truy cập địa chỉ website hệ thống trên điện thoại.",
       "Bước 2: Đưa camera vào lá lúa và ấn nút Chụp ảnh.",
       "Bước 3: Nhận ngay tên bệnh, độ tin cậy %, khoanh vùng vị trí vết bệnh."
     ],
@@ -573,7 +735,7 @@ export const PRESENTATION_SLIDES: PresentationSlide[] = [
     title: "CÁCH SỬ DỤNG BỘ CẢM BIẾN ĐẤT TRỒNG LÚA",
     category: "Tính mới & Nguyên lý",
     summaryText: "Quy trình kết nối và vận hành bộ cảm biến 7-in-1 cắm trực tiếp ngoài ruộng.",
-    speakerScript: "Để đo đất, nông dân BƯỚC 4 Cắm chân cảm biến xuống đất ruộng -> BƯỚC 5 Bật công tắc và ấn START. Các chỉ số lập tức hiện trên màn hình TFT và đồng bộ về Web.",
+    speakerScript: "Để đo đất, nông dân chỉ cần: BƯỚC 4: Cắm chân cảm biến xuống đất ruộng. BƯỚC 5: Bật công tắc và ấn START. Các chỉ số lập tức hiện trên màn hình TFT và đồng bộ về Web.",
     bulletPoints: [
       "Bước 4: Đặt đầu cảm biến xuống đất ruộng lúa.",
       "Bước 5: Bật công tắc nguồn, ấn nút START để đo và cập nhật dữ liệu.",
@@ -610,33 +772,61 @@ export const PRESENTATION_SLIDES: PresentationSlide[] = [
   },
   {
     id: 15,
-    title: "ĐÁNH GIÁ TỰ THỰC ĐỊA & Ý KIẾN BÀ CON NÔNG DÂN",
+    title: "CÁC VIDEO ĐÁNH GIÁ, GIỚI THIỆU TIÊU BIỂU",
     category: "Thực nghiệm & So sánh",
-    summaryText: "Phản hồi tích cực từ nông dân (Chú Tùng, Chú Vinh, Chú Hoàng - TP. Cần Thơ).",
-    speakerScript: "Bà con nông dân tại Cần Thơ sau khi dùng thử đã đánh giá rất cao sự tiện lợi, giúp nông dân yên tâm bảo vệ đồng ruộng.",
+    summaryText: "Ghi nhận tư liệu thực tế giới thiệu và hướng dẫn bà con nông dân sử dụng bộ thiết bị ngoài đồng ruộng.",
+    speakerScript: "Đây là các video tư liệu quý giá của nhóm: Thầy Lê Thanh Liêm giới thiệu sản phẩm và các bạn học sinh Bảo Ngân, Tường Vy trực tiếp hướng dẫn chú Vinh, chú Hoàng đo đạc và chụp ảnh lá lúa.",
     bulletPoints: [
-      "Chú Vinh (xã Thạnh Hòa): 'Máy báo chính xác bệnh đạo ôn, tui ngưng bón đạm xịt thuốc đúng liều tiết kiệm hẳn chi phí!'",
-      "Chú Hoàng (xã Tân Bình): 'Giao diện web dễ xài, cầm điện thoại bấm cái là biết chỉ số đất liền.'",
-      "Chú Tùng (xã Tân Hòa): 'Thiết bị gọn nhẹ, cắm tripod ngoài ruộng rất vững chãi.'"
+      "VIDEO 1: Giáo viên hướng dẫn đang giới thiệu nguyên lý hoạt động của sản phẩm ngoài đồng ruộng.",
+      "VIDEO 2: Bạn Bảo Ngân tận tình hướng dẫn chú Vinh cắm chân cảm biến và thao tác đo đạc đất lúa.",
+      "VIDEO 3: Bạn Tường Vy trực tiếp hướng dẫn chú Hoàng cách dùng điện thoại chụp ảnh lá lúa nhận dạng bệnh tức thì."
     ],
     diagramType: "survey_detail"
   },
   {
     id: 16,
+    title: "Ý KIẾN ĐÁNH GIÁ TRỰC TIẾP TỪ BÀ CON NÔNG DÂN",
+    category: "Thực nghiệm & So sánh",
+    summaryText: "Phản hồi chân thực từ các hộ nông dân trực tiếp sử dụng trải nghiệm sản phẩm tại Cần Thơ.",
+    speakerScript: "Ý kiến đóng góp từ các hộ nông dân tại Cần Thơ đều rất tích cực. Bà con rất phấn khởi khi có một công cụ đo đất chính xác và chụp ảnh chẩn đoán bệnh tức thì bằng tiếng Việt.",
+    bulletPoints: [
+      "Chú Vinh (xã Thạnh Hòa): 'Thiết bị báo chuẩn bệnh đạo ôn, giúp tui kịp thời ngừng bón phân đạm bừa bãi và dập dịch tốt!'",
+      "Chú Hoàng (xã Tân Bình): 'Giao diện web bằng điện thoại rất trực quan, đo đất cái là biết ngay NPK thiếu đủ thế nào.'",
+      "Chú Tùng (xã Tân Hòa): 'Mô hình tripod cắm đất dã chiến rất vững chãi, gọn nhẹ, dễ xách đi khắp mọi góc ruộng lúa.'"
+    ],
+    diagramType: "survey_detail"
+  },
+  {
+    id: 17,
+    title: "HIỆU QUẢ ỨNG DỤNG SO VỚI TRUYỀN THỐNG (AI-RICE VS TRUYỀN THỐNG)",
+    category: "Thực nghiệm & So sánh",
+    summaryText: "Bảng phân tích hiệu quả vượt trội về thời gian phản hồi, độ chính xác và khả năng theo dõi thổ nhưỡng.",
+    speakerScript: "Bảng so sánh này thể hiện rõ rệt hiệu quả của AI-RICE so với canh tác truyền thống: rút ngắn thời gian chẩn đoán từ vài ngày xuống 1-3 giây, nâng độ chính xác lên 90-95% và tự động hóa theo dõi đất đai.",
+    bulletPoints: [
+      "NHẬN DIỆN BỆNH: Phương pháp thủ công bằng mắt thường -> Được hệ thống AI thông minh hỗ trợ 24/7.",
+      "SỐ LƯỢNG NHẬN DIỆN: Kinh nghiệm không xác định rõ -> Nhận diện chuẩn xác 11 loại dịch hại.",
+      "THỜI GIAN XỬ LÝ: Mất vài giờ đến vài ngày gửi mẫu -> Chỉ mất 1-3 giây/ảnh chụp (đạt mAP50 cao).",
+      "ĐỘ CHÍNH XÁC: Phụ thuộc hoàn toàn cảm tính -> Đạt độ chính xác khoa học từ 90% - 95%.",
+      "THEO DÕI ĐẤT: Quan sát phỏng đoán đất tốt xấu -> Giám sát tự động 7 chỉ số NPK/pH/EC định lượng rõ ràng."
+    ],
+    diagramType: "comparison"
+  },
+  {
+    id: 18,
     title: "BẢNG GIÁ THÀNH SẢN PHẨM & KẾ HOẠCH KINH DOANH",
     category: "Kế hoạch Kinh doanh",
-    summaryText: "Chi phí sản xuất tối ưu và cấu trúc giá bán cực kỳ cạnh tranh.",
-    speakerScript: "Về kinh doanh, chi phí sản xuất phần cứng bộ cảm biến có trụ tripod chỉ 1.714.000 VNĐ, giá bán dự kiến 2.056.800 VNĐ, phù hợp với túi tiền của bà con.",
+    summaryText: "Chi phí sản xuất tối ưu và cấu trúc giá bán cực kỳ cạnh tranh cho nông dân.",
+    speakerScript: "Về thương mại hóa, bộ thiết bị cảm biến có trụ tripod có giá bán 2.056.800 VNĐ, bộ không trụ là 1.784.000 VNĐ, tài khoản Web AI duy trì là 100.000 VNĐ/tháng.",
     bulletPoints: [
-      "Bộ thiết bị có trụ tripod: Chi phí 1.714.000 VNĐ | Giá bán 2.056.800 VNĐ | Lợi nhuận 342.800 VNĐ.",
-      "Bộ thiết bị không trụ: Chi phí 1.487.000 VNĐ | Giá bán 1.784.000 VNĐ | Lợi nhuận 297.000 VNĐ.",
-      "Tài khoản Web AI: Chi phí vận hành 57.200 VNĐ/tháng | Giá bán 100.000 VNĐ/tháng.",
-      "Combo Trọn gói: Giá bán ưu đãi 2.036.880 VNĐ."
+      "BỘ CÓ TRỤ TRIPOD: Chi phí sản xuất 1.714.000 VNĐ | Giá bán dự kiến 2.056.800 VNĐ | Lợi nhuận 342.800 VNĐ.",
+      "BỘ KHÔNG TRỤ: Chi phí sản xuất 1.487.000 VNĐ | Giá bán dự kiến 1.784.000 VNĐ | Lợi nhuận 297.000 VNĐ.",
+      "TÀI KHOẢN WEB AI: Chi phí vận hành 57.200 VNĐ/tháng | Giá bán 100.000 VNĐ/tháng.",
+      "COMBO TRỌN GÓI: Giá bán ưu đãi 2.036.880 VNĐ."
     ],
     diagramType: "business"
   },
   {
-    id: 17,
+    id: 19,
     title: "BUSINESS MODEL CANVAS (MÔ HÌNH KINH DOANH)",
     category: "Kế hoạch Kinh doanh",
     summaryText: "Cấu trúc Đối tác, Hoạt động, Giá trị, Kênh phân phối & Phân khúc khách hàng.",
@@ -649,7 +839,7 @@ export const PRESENTATION_SLIDES: PresentationSlide[] = [
     diagramType: "business"
   },
   {
-    id: 18,
+    id: 20,
     title: "GIAO DIỆN QUẢN LÝ HỆ THỐNG & TÀI KHOẢN ADMIN",
     category: "Kế hoạch Kinh doanh",
     summaryText: "Hệ thống cấp Access Key, theo dõi Quota sử dụng và quản lý hạn dùng.",
@@ -662,7 +852,7 @@ export const PRESENTATION_SLIDES: PresentationSlide[] = [
     diagramType: "business"
   },
   {
-    id: 19,
+    id: 21,
     title: "NGUYỆN VỌNG VÀ ĐỊNH HƯỚNG PHÁT TRIỂN TRONG TƯƠNG LAI",
     category: "Kế hoạch Kinh doanh",
     summaryText: "Lộ trình mở rộng tính năng AI dự đoán nguy cơ, Trợ lý Giọng nói & Bản đồ AI.",
@@ -675,7 +865,33 @@ export const PRESENTATION_SLIDES: PresentationSlide[] = [
     diagramType: "prototype"
   },
   {
-    id: 20,
+    id: 22,
+    title: "HÌNH ẢNH MINH HỌA THỰC TẾ TRÊN RUỘNG LÚA (PHẦN 1)",
+    category: "Thực nghiệm & So sánh",
+    summaryText: "Hình ảnh đối chứng thực tế đốm bệnh Cháy bìa lá vi khuẩn và hiện tượng lúa bị Thiếu hụt Kali.",
+    speakerScript: "Slide này trình bày hình ảnh đối chứng đốm bệnh Cháy bìa lá do vi khuẩn gây ra dọc mép lá lúa và hiện tượng Thiếu hụt Kali làm mép lá bị úa vàng, khô héo.",
+    bulletPoints: [
+      "CHÁY BÌA LÁ (BẠC LÁ): Vết bệnh lan dọc theo mép lá lúa từ chóp xuống, ban đầu màu vàng nhạt rồi chuyển sang xám trắng.",
+      "THIẾU KALI: Đầu lá và mép lá xuất hiện các vệt vàng cam úa khô, lá lúa bị khô héo dần từ rìa ngoài vào gân trong."
+    ],
+    diagramType: "images_part1"
+  },
+  {
+    id: 23,
+    title: "HÌNH ẢNH MINH HỌA THỰC TẾ TRÊN RUỘNG LÚA (PHẦN 2)",
+    category: "Thực nghiệm & So sánh",
+    summaryText: "Hình ảnh đối chứng đốm bệnh Thiếu Lân, Vàng lùn, Khô vằn và Đạo ôn lá điển hình.",
+    speakerScript: "Slide cuối trình bày 4 hình ảnh đối chứng thực địa: cây lúa bị Thiếu Lân còi cọc màu xanh đậm tím; bệnh Vàng lùn lùn xoắn lá; đốm mây Khô vằn gốc bẹ; vết hình thoi Đạo ôn lá lúa.",
+    bulletPoints: [
+      "THIẾU LÂN: Lá lúa hẹp, dựng đứng có màu xanh tối đậm ngả tím, đẻ nhánh cực kỳ kém, cây lúa còi cọc.",
+      "VÀNG LÙN: Lá lúa ngả sang màu vàng cam chói, phiến lá ngắn bị xoắn đầu lá, cây lúa lùn rụt không thể làm đòng trỗ bông.",
+      "KHÔ VẰN: Vết loang hình đốm mây vằn vèo như da hổ xuất hiện từ bẹ gốc sát mặt nước lây lan nhanh lên phiến lá.",
+      "ĐẠO ÔN: Vết bệnh hình thoi hoại tử đặc trưng có tâm xám trắng bám rải rác trên phiến lá lúa, lan rộng làm cháy khô bộ lá."
+    ],
+    diagramType: "images_part2"
+  },
+  {
+    id: 24,
     title: "KẾT LUẬN & LỜI CẢM ƠN BAN GIÁM KHẢO",
     subtitle: "Dự án AI-RICE (Super Rice) - Trường PTDTNT THCS Him Lam, Cần Thơ",
     category: "Tổng quan",

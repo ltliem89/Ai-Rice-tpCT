@@ -114,6 +114,15 @@ export default function App() {
     setQuickGuideTab(tab || activeTab);
     setShowQuickGuideModal(true);
   };
+
+  // Disease Detail Modal State for displaying What is it, Identification, Harmful effects
+  const [showDiseaseModal, setShowDiseaseModal] = useState<boolean>(false);
+  const [modalDisease, setModalDisease] = useState<DiseaseItem | null>(null);
+
+  const openDiseaseDetail = (disease: DiseaseItem) => {
+    setModalDisease(disease);
+    setShowDiseaseModal(true);
+  };
   const [calibrationConfig, setCalibrationConfig] = useState({
     phOffset: 0.0,
     ecOffset: 0.0,
@@ -1307,14 +1316,14 @@ export default function App() {
                       {RICE_DISEASES.map((disease) => {
                         const isSelected = selectedSandboxDisease?.id === disease.id && !customUploadedImage;
                         return (
-                          <button
+                          <div
                             key={disease.id}
                             onClick={() => {
                               setSelectedSandboxDisease(disease);
                               setCustomUploadedImage(null);
                               setSandboxImageBase64(null);
                             }}
-                            className={`p-1 bg-slate-50 border rounded-lg overflow-hidden text-left transition-all flex flex-col gap-1 cursor-pointer hover:border-emerald-500 ${
+                            className={`p-1 bg-slate-50 border rounded-lg overflow-hidden text-left transition-all flex flex-col gap-1 cursor-pointer hover:border-emerald-500 relative group ${
                               isSelected ? "ring-2 ring-emerald-600 border-emerald-600" : "border-slate-200"
                             }`}
                           >
@@ -1323,10 +1332,23 @@ export default function App() {
                               alt={disease.name}
                               className="w-full h-12 object-cover rounded"
                             />
-                            <span className="text-[10px] font-bold text-slate-800 block truncate px-1">
-                              {disease.name}
-                            </span>
-                          </button>
+                            <div className="flex items-center justify-between px-1">
+                              <span className="text-[10px] font-bold text-slate-800 truncate">
+                                {disease.name}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openDiseaseDetail(disease);
+                                }}
+                                className="p-0.5 text-slate-400 hover:text-emerald-700 hover:bg-emerald-100 rounded transition-all cursor-pointer shrink-0"
+                                title="Xem hồ sơ chi tiết (Khái niệm, Nhận biết, Tác hại)"
+                              >
+                                <Info className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
                         );
                       })}
                     </div>
@@ -1366,7 +1388,14 @@ export default function App() {
                         {aiAnalysisResult.diseaseName}
                       </h4>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => openDiseaseDetail(selectedSandboxDisease || RICE_DISEASES[0])}
+                        className="bg-emerald-700 hover:bg-emerald-600 text-white px-2.5 py-1 rounded text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                        title="Xem chi tiết: Bệnh này là gì, Cách nhận biết, Tác hại"
+                      >
+                        <Info className="w-3.5 h-3.5 text-emerald-200" /> Hồ Sơ Bệnh Chi Tiết
+                      </button>
                       <span className="bg-emerald-50 border border-emerald-100 text-emerald-800 px-2.5 py-1 rounded text-xs font-bold">
                         Độ tin cậy: {aiAnalysisResult.confidence}%
                       </span>
@@ -1549,60 +1578,124 @@ export default function App() {
                   </h2>
                 </div>
 
-                <div className="bg-emerald-50 border border-emerald-100 px-3.5 py-2 rounded-xl text-center">
-                  <p className="text-[10px] text-emerald-700 font-bold uppercase">Mẫu Ảnh Thực Nghiệm</p>
-                  <p className="text-xl font-mono font-black text-emerald-950 mt-0.5">{selectedLibraryDisease.experimentalPhotoCount} tấm</p>
+                <div className="flex flex-col sm:flex-row items-end gap-3">
+                  <button
+                    onClick={() => openDiseaseDetail(selectedLibraryDisease)}
+                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                    title="Mở cửa sổ phóng to"
+                  >
+                    <Info className="w-4 h-4 text-emerald-100" /> Phóng To Hồ Sơ Full
+                  </button>
+                  <div className="bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl text-center">
+                    <p className="text-[9px] text-emerald-700 font-bold uppercase">Mẫu Ảnh Thực Nghiệm</p>
+                    <p className="text-base font-mono font-black text-emerald-950">{selectedLibraryDisease.experimentalPhotoCount} tấm</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Symptoms and ecological factors */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2.5 flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
-                    <Leaf className="w-4 h-4 text-emerald-600" /> Triệu chứng nhận biết
+              {/* 1. WHAT IS THIS DISEASE? (Definition & Biological nature) */}
+              <div className="bg-emerald-50/70 border border-emerald-200/70 p-4 rounded-xl space-y-1.5">
+                <h4 className="font-extrabold text-emerald-950 text-xs uppercase tracking-wider flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-emerald-600" /> 1. Bệnh này là gì? (Khái niệm &amp; Bản chất sinh học)
+                </h4>
+                <p className="text-slate-700 leading-relaxed text-xs font-normal">
+                  {selectedLibraryDisease.definition}
+                </p>
+              </div>
+
+              {/* 2. HOW TO IDENTIFY DISEASE? (Identification & Symptoms) */}
+              <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-xl space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-2 border-b border-slate-200/60 pb-2">
+                  <Leaf className="w-4 h-4 text-emerald-600" /> 2. Cách nhận biết &amp; Dấu hiệu chẩn đoán đặc trưng?
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <p className="font-bold text-slate-800 text-[11px] mb-1.5 text-emerald-900">
+                      • Triệu chứng quan sát ngoài ruộng:
+                    </p>
+                    <ul className="space-y-1.5 text-slate-600">
+                      {selectedLibraryDisease.symptoms.map((sym, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-emerald-600 font-bold mt-0.5">•</span>
+                          <span className="leading-relaxed">{sym}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-[11px] mb-1.5 text-emerald-900">
+                      • Dấu hiệu chẩn đoán phân biệt:
+                    </p>
+                    <ul className="space-y-1.5 text-slate-600">
+                      {selectedLibraryDisease.identification.map((item, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-amber-600 font-bold mt-0.5">›</span>
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. HARMFUL EFFECTS & YIELD LOSS */}
+              <div className="bg-rose-50/80 border border-rose-200/80 p-4 rounded-xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-rose-950 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600" /> 3. Tác hại &amp; Thiệt hại năng suất?
                   </h4>
-                  <ul className="space-y-2 text-xs text-slate-600">
-                    {selectedLibraryDisease.symptoms.map((sym, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-red-500 mt-0.5 font-bold">•</span>
-                        <span className="leading-relaxed">{sym}</span>
+                  <span className="bg-rose-600 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase">
+                    Thất thu: {selectedLibraryDisease.harmfulEffects.yieldLoss}
+                  </span>
+                </div>
+                <p className="text-rose-900/90 font-medium text-xs leading-relaxed">
+                  {selectedLibraryDisease.harmfulEffects.description}
+                </p>
+                <div className="pt-2 border-t border-rose-200/60">
+                  <p className="font-bold text-[10px] text-rose-900 uppercase mb-1">Các ảnh hưởng sinh lý &amp; kinh tế chính:</p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-rose-900/80">
+                    {selectedLibraryDisease.harmfulEffects.impacts.map((imp, i) => (
+                      <li key={i} className="flex items-start gap-1.5">
+                        <span className="font-bold text-rose-600">›</span>
+                        <span>{imp}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
+              </div>
 
-                <div>
-                  <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2.5 flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
-                    <Sliders className="w-4 h-4 text-amber-600" /> Điều kiện bùng phát dịch
+              {/* Favorable conditions & Soil nutrition standards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-xl">
+                  <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Sliders className="w-4 h-4 text-amber-600" /> Điều kiện thời tiết bùng phát dịch
                   </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {selectedLibraryDisease.favorableConditions}
                   </p>
                 </div>
-              </div>
 
-              {/* Soil nutrition standards dashboard chart */}
-              <div className="border border-slate-100 bg-slate-50/50 rounded-xl p-4">
-                <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-3">
-                  Ngưỡng Dinh Dưỡng Thổ Nhưỡng Đặc Trưng
-                </h4>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-                  <div className="bg-white border border-slate-200/60 p-2.5 rounded-lg">
-                    <p className="text-[10px] font-bold text-slate-400">ĐỘ ẨM ĐẤT</p>
-                    <p className="text-base font-black text-slate-800 mt-0.5">{selectedLibraryDisease.typicalSoil.moisture}</p>
-                  </div>
-                  <div className="bg-white border border-slate-200/60 p-2.5 rounded-lg">
-                    <p className="text-[10px] font-bold text-slate-400">ĐỘ pH ĐẤT</p>
-                    <p className="text-base font-black text-slate-800 mt-0.5">{selectedLibraryDisease.typicalSoil.pH}</p>
-                  </div>
-                  <div className="bg-white border border-slate-200/60 p-2.5 rounded-lg">
-                    <p className="text-[10px] font-bold text-slate-400">ĐỘ DẪN ĐIỆN EC</p>
-                    <p className="text-base font-black text-slate-800 mt-0.5">{selectedLibraryDisease.typicalSoil.ec}</p>
-                  </div>
-                  <div className="bg-white border border-slate-200/60 p-2.5 rounded-lg">
-                    <p className="text-[10px] font-bold text-slate-400">NPK ĐẤT TRUNG BÌNH</p>
-                    <p className="text-xs font-mono font-bold text-slate-800 mt-1">{selectedLibraryDisease.typicalSoil.npk}</p>
+                <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-xl">
+                  <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                    Ngưỡng Thổ Nhưỡng Đặc Trưng (Cảm Biến 7-in-1)
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2 text-center">
+                    <div className="bg-white border border-slate-200 p-1.5 rounded-lg">
+                      <p className="text-[9px] font-bold text-slate-400">ĐỘ ẨM</p>
+                      <p className="text-xs font-black text-slate-800">{selectedLibraryDisease.typicalSoil.moisture}</p>
+                    </div>
+                    <div className="bg-white border border-slate-200 p-1.5 rounded-lg">
+                      <p className="text-[9px] font-bold text-slate-400">pH ĐẤT</p>
+                      <p className="text-xs font-black text-slate-800">{selectedLibraryDisease.typicalSoil.pH}</p>
+                    </div>
+                    <div className="bg-white border border-slate-200 p-1.5 rounded-lg">
+                      <p className="text-[9px] font-bold text-slate-400">ĐỘ DẪN EC</p>
+                      <p className="text-xs font-black text-slate-800">{selectedLibraryDisease.typicalSoil.ec}</p>
+                    </div>
+                    <div className="bg-white border border-slate-200 p-1.5 rounded-lg">
+                      <p className="text-[9px] font-bold text-slate-400">NPK</p>
+                      <p className="text-[10px] font-mono font-bold text-slate-800">{selectedLibraryDisease.typicalSoil.npk}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2534,6 +2627,170 @@ export default function App() {
                   Thử Ngay Tab Này <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* DISEASE DETAIL MODAL */}
+      {showDiseaseModal && modalDisease && (
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+            
+            {/* Modal Header */}
+            <div className="bg-emerald-950 text-white p-5 flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <img
+                  src={modalDisease.sampleImage}
+                  alt={modalDisease.name}
+                  className="w-14 h-14 object-cover rounded-xl border-2 border-emerald-500/50 shrink-0"
+                />
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 bg-emerald-800 text-emerald-200 text-[10px] font-bold uppercase rounded">
+                      {modalDisease.category}
+                    </span>
+                    <span className="text-[11px] text-emerald-400 font-mono">
+                      {modalDisease.scientificName}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-black text-white mt-1">
+                    {modalDisease.name} <span className="text-emerald-300/80 text-sm font-normal">({modalDisease.englishName})</span>
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDiseaseModal(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-emerald-900 transition-all cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 overflow-y-auto space-y-5 text-xs text-slate-700">
+              
+              {/* Question 1: What is this disease? */}
+              <div className="bg-emerald-50/80 border border-emerald-200/80 p-4 rounded-xl">
+                <h4 className="font-extrabold text-emerald-950 text-xs uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-emerald-600" /> 1. Bệnh này là gì? (Khái niệm &amp; Bản chất tác nhân)
+                </h4>
+                <p className="text-slate-800 leading-relaxed text-xs">
+                  {modalDisease.definition}
+                </p>
+              </div>
+
+              {/* Question 2: How to identify? */}
+              <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                <h4 className="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-2.5 flex items-center gap-2">
+                  <Leaf className="w-4 h-4 text-emerald-600" /> 2. Cách nhận biết &amp; Dấu hiệu đặc trưng?
+                </h4>
+                <ul className="space-y-2">
+                  {modalDisease.identification.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-700">
+                      <span className="text-emerald-600 font-bold mt-0.5">•</span>
+                      <span className="leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Question 3: Harmful effects & Yield loss */}
+              <div className="bg-rose-50/90 border border-rose-200/90 p-4 rounded-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-extrabold text-rose-950 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600" /> 3. Tác hại &amp; Mức độ thiệt hại năng suất?
+                  </h4>
+                  <span className="bg-rose-600 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase">
+                    {modalDisease.harmfulEffects.yieldLoss}
+                  </span>
+                </div>
+                <p className="text-rose-900/90 font-medium leading-relaxed mb-3">
+                  {modalDisease.harmfulEffects.description}
+                </p>
+                <div className="space-y-1.5 border-t border-rose-200/60 pt-2.5">
+                  <p className="font-bold text-[11px] text-rose-900 uppercase">Tác động sinh lý &amp; kinh tế chính:</p>
+                  <ul className="space-y-1 text-rose-900/80">
+                    {modalDisease.harmfulEffects.impacts.map((imp, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="font-bold">›</span>
+                        <span>{imp}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Soil Sensor Standards */}
+              <div className="border border-slate-200 bg-slate-50/50 p-4 rounded-xl">
+                <h4 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-amber-600" /> 4. Chỉ số cảm biến đất đặc trưng thúc đẩy bệnh
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-center">
+                  <div className="bg-white border border-slate-200 p-2 rounded-lg">
+                    <span className="text-[9px] font-bold text-slate-400 block">ĐỘ ẨM ĐẤT</span>
+                    <span className="text-sm font-black text-slate-800">{modalDisease.typicalSoil.moisture}</span>
+                  </div>
+                  <div className="bg-white border border-slate-200 p-2 rounded-lg">
+                    <span className="text-[9px] font-bold text-slate-400 block">pH ĐẤT</span>
+                    <span className="text-sm font-black text-slate-800">{modalDisease.typicalSoil.pH}</span>
+                  </div>
+                  <div className="bg-white border border-slate-200 p-2 rounded-lg">
+                    <span className="text-[9px] font-bold text-slate-400 block">ĐỘ DẪN EC</span>
+                    <span className="text-sm font-black text-slate-800">{modalDisease.typicalSoil.ec}</span>
+                  </div>
+                  <div className="bg-white border border-slate-200 p-2 rounded-lg">
+                    <span className="text-[9px] font-bold text-slate-400 block">NPK ĐẤT TRUNG BÌNH</span>
+                    <span className="text-[11px] font-mono font-bold text-slate-800">{modalDisease.typicalSoil.npk}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Treatment & Prevention */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-red-50/80 border border-red-100 p-3.5 rounded-xl">
+                  <h5 className="font-bold text-red-950 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 text-red-700" /> Phác đồ điều trị đặc trị
+                  </h5>
+                  <ul className="space-y-1.5 text-red-900/90 leading-relaxed text-[11px]">
+                    {modalDisease.treatment.map((tr, i) => (
+                      <li key={i} className="flex items-start gap-1.5">
+                        <span className="font-bold">›</span>
+                        <span>{tr}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-emerald-50/80 border border-emerald-100 p-3.5 rounded-xl">
+                  <h5 className="font-bold text-emerald-950 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-700" /> Phòng ngừa bền vững
+                  </h5>
+                  <ul className="space-y-1.5 text-emerald-900/90 leading-relaxed text-[11px]">
+                    {modalDisease.preventiveMeasures.map((pm, i) => (
+                      <li key={i} className="flex items-start gap-1.5">
+                        <span className="font-bold">✓</span>
+                        <span>{pm}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 font-medium">
+                Cơ sở dữ liệu bệnh hại AI-RICE • Trường PTDTNT THCS Him Lam
+              </span>
+              <button
+                onClick={() => setShowDiseaseModal(false)}
+                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md transition-all cursor-pointer text-xs"
+              >
+                Đóng Cửa Sổ Hồ Sơ
+              </button>
             </div>
 
           </div>

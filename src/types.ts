@@ -4,6 +4,13 @@ export interface DiseaseItem {
   englishName: string;
   scientificName: string;
   category: "Bệnh do nấm" | "Bệnh do vi khuẩn" | "Bệnh do virus" | "Sâu hại / Côn trùng" | "Sinh lý / Môi trường";
+  definition: string;
+  identification: string[];
+  harmfulEffects: {
+    yieldLoss: string;
+    description: string;
+    impacts: string[];
+  };
   symptoms: string[];
   favorableConditions: string;
   typicalSoil: {
@@ -67,7 +74,7 @@ export interface PresentationSlide {
   speakerScript: string;
   bulletPoints?: string[];
   imageIllustration?: string;
-  diagramType?: "architecture" | "comparison" | "dataset" | "prototype" | "business" | "survey" | "survey_detail";
+  diagramType?: "architecture" | "comparison" | "dataset" | "prototype" | "business" | "survey" | "survey_detail" | "images_part1" | "images_part2";
 }
 
 export interface BusinessCostItem {
