@@ -56,8 +56,72 @@ import {
   Award,
   HelpCircle,
   Sparkles,
-  Compass
+  Compass,
+  CloudSun
 } from "lucide-react";
+
+const WEATHER_PRESETS = [
+  {
+    id: "heavy_rain",
+    name: "Mưa Rào Nhiệt Đới / Mưa Bão",
+    temp: 26,
+    airHumidity: 90,
+    rainMm: 48,
+    conditionLabel: "Ngập úng & Rửa trôi",
+    icon: "🌧️",
+    bgGradient: "from-blue-900 to-sky-800",
+    impactDescription: "Mưa rào kéo dài (48mm) làm mặt ruộng ngập úng nhẹ → Độ ẩm đất tăng vọt lên 92%. Rửa trôi bớt Đạm (N), kiềm hóa nhẹ và giảm nguy cơ cháy lá.",
+    targetMoisture: 92,
+    targetTemp: 25,
+    targetEc: 0.58,
+    targetNFactor: -5
+  },
+  {
+    id: "sunny_hot",
+    name: "Nắng Nóng Bốc Hơi Hạn Hán",
+    temp: 35,
+    airHumidity: 58,
+    rainMm: 0,
+    conditionLabel: "Khô hạn & Bốc hơi nhanh",
+    icon: "☀️",
+    bgGradient: "from-amber-700 to-orange-800",
+    impactDescription: "Nhiệt độ không khí 35°C làm nước bốc hơi mạnh → Độ ẩm đất hạ nhanh về 52%. Khoáng chất và muối tích tụ đẩy EC vọt lên 0.98 mS/cm.",
+    targetMoisture: 52,
+    targetTemp: 34,
+    targetEc: 0.98,
+    targetNFactor: 2
+  },
+  {
+    id: "mild_cloudy",
+    name: "Nắng Dịu / Ôn Hòa Lý Tưởng",
+    temp: 29,
+    airHumidity: 78,
+    rainMm: 5,
+    conditionLabel: "Cân bằng sinh thái lúa",
+    icon: "⛅",
+    bgGradient: "from-emerald-800 to-teal-900",
+    impactDescription: "Môi trường thời tiết ĐBSCL lý tưởng. Cân bằng quá trình bốc thoát hơi nước của lá và độ ẩm đất ổn định ở mức vàng 80%.",
+    targetMoisture: 80,
+    targetTemp: 28,
+    targetEc: 0.81,
+    targetNFactor: 0
+  },
+  {
+    id: "drought_saline",
+    name: "Nắng Hạn Xâm Nhập Mặn",
+    temp: 36,
+    airHumidity: 48,
+    rainMm: 0,
+    conditionLabel: "Cảnh báo Mặn & Báo động Khô",
+    icon: "⚡",
+    bgGradient: "from-purple-950 to-rose-950",
+    impactDescription: "Xâm nhập mặn bão hòa EC vọt lên 1.85 mS/cm, độ ẩm đất giảm cực hạn về 42%. Lúa có nguy cơ cháy lá & xơ cứng ngọn.",
+    targetMoisture: 42,
+    targetTemp: 36,
+    targetEc: 1.85,
+    targetNFactor: -10
+  }
+];
 import {
   ResponsiveContainer,
   LineChart,
@@ -105,6 +169,32 @@ export default function App() {
     sensorStatus: "ONLINE",
     batteryLevel: 94
   });
+
+  // Weather Integration States
+  const [selectedWeatherId, setSelectedWeatherId] = useState<string>("heavy_rain");
+  const [autoApplyWeather, setAutoApplyWeather] = useState<boolean>(true);
+  const [weatherNotification, setWeatherNotification] = useState<string | null>(null);
+
+  const activeWeather = useMemo(() => {
+    return WEATHER_PRESETS.find((w) => w.id === selectedWeatherId) || WEATHER_PRESETS[0];
+  }, [selectedWeatherId]);
+
+  const applyWeatherToSoilSensor = (weatherId: string) => {
+    const preset = WEATHER_PRESETS.find((w) => w.id === weatherId) || WEATHER_PRESETS[0];
+    setSelectedWeatherId(preset.id);
+
+    setSimulatedSensor((prev) => ({
+      ...prev,
+      moisture: preset.targetMoisture,
+      temperature: preset.targetTemp,
+      ec: preset.targetEc,
+      nitrogen: Math.max(10, Math.min(200, prev.nitrogen + preset.targetNFactor)),
+      timestamp: new Date().toLocaleTimeString()
+    }));
+
+    setWeatherNotification(`⛅ Đã đồng bộ kịch bản thời tiết "${preset.name}": Độ ẩm đất tự động cập nhật lên ${preset.targetMoisture}% (Nhiệt độ đất: ${preset.targetTemp}°C, EC: ${preset.targetEc} mS/cm)!`);
+    setTimeout(() => setWeatherNotification(null), 4500);
+  };
 
   // Sensor & AI Calibration Modal state
   const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
@@ -371,6 +461,53 @@ export default function App() {
     { name: "10:40", moisture: 80, temp: 28.0, pH: 5.9, ec: 0.81 }
   ]);
 
+  // Computed trend lines for Moisture & pH (for Judges visualization)
+  const formattedSensorHistory = useMemo(() => {
+    if (!sensorHistory || sensorHistory.length === 0) return [];
+    const n = sensorHistory.length;
+    if (n < 2) return sensorHistory.map(pt => ({ ...pt, moistureTrend: pt.moisture, pHTrend: pt.pH }));
+
+    let sumX = 0, sumMoisture = 0, sumPH = 0, sumXYMoisture = 0, sumXYPH = 0, sumX2 = 0;
+    sensorHistory.forEach((pt, i) => {
+      sumX += i;
+      sumX2 += i * i;
+      sumMoisture += pt.moisture;
+      sumPH += pt.pH;
+      sumXYMoisture += i * pt.moisture;
+      sumXYPH += i * pt.pH;
+    });
+
+    const slopeMoisture = (n * sumXYMoisture - sumX * sumMoisture) / (n * sumX2 - sumX * sumX || 1);
+    const interceptMoisture = (sumMoisture - slopeMoisture * sumX) / n;
+
+    const slopePH = (n * sumXYPH - sumX * sumPH) / (n * sumX2 - sumX * sumX || 1);
+    const interceptPH = (sumPH - slopePH * sumX) / n;
+
+    return sensorHistory.map((pt, i) => ({
+      ...pt,
+      moistureTrend: parseFloat((interceptMoisture + slopeMoisture * i).toFixed(1)),
+      pHTrend: parseFloat((interceptPH + slopePH * i).toFixed(2))
+    }));
+  }, [sensorHistory]);
+
+  const sensorTrends = useMemo(() => {
+    if (!formattedSensorHistory || formattedSensorHistory.length < 2) {
+      return { moistureDelta: 0, moistureDirection: 'stable', phDelta: 0, phDirection: 'stable' };
+    }
+    const first = formattedSensorHistory[0];
+    const last = formattedSensorHistory[formattedSensorHistory.length - 1];
+
+    const mDelta = last.moisture - first.moisture;
+    const phDelta = parseFloat((last.pH - first.pH).toFixed(2));
+
+    return {
+      moistureDelta: mDelta,
+      moistureDirection: mDelta > 0 ? 'rising' : mDelta < 0 ? 'falling' : 'stable',
+      phDelta: phDelta,
+      phDirection: phDelta > 0 ? 'rising' : phDelta < 0 ? 'falling' : 'stable'
+    };
+  }, [formattedSensorHistory]);
+
   // 7-Day NPK Soil Nutrient Forecast based on current sensor values
   const npkForecastData = useMemo(() => {
     const curN = simulatedSensor.nitrogen;
@@ -491,14 +628,76 @@ export default function App() {
 
   // Preset Questions for Judges
   const PRESET_QUESTIONS = [
-    "Sự phối hợp giữa phần cứng cảm biến và phần mềm AI của các em diễn ra như thế nào để tạo nên tính mới đột phá?",
-    "Cảm biến 7 trong 1 đo các chỉ số N, P, K bằng nguyên lý nào?",
-    "Mô hình YOLOv8 được huấn luyện trên bao nhiêu ảnh và độ chính xác mAP đạt bao nhiêu?",
-    "Tại sao các em lại chọn giải pháp Web di động thay vì viết ứng dụng Android/iOS?",
-    "Chi phí chế tạo 1.6 triệu đồng có quá đắt đối với người nông dân trồng lúa nghèo không?",
-    "Các em phân chia vai trò thành viên nhóm như thế nào trong dự án này?",
-    "Định hướng thương mại hóa sản phẩm của nhóm ra sao?"
+    "Sự phối hợp giữa phần cứng cảm biến 7-in-1 và mô hình AI diễn ra như thế nào để tạo nên đột phá?",
+    "Tại sao ứng dụng lại giải quyết được nhược điểm đoán nhầm bệnh của Plantix hay NextFarm?",
+    "Chi phí sản xuất 1.6 triệu đồng bao gồm những linh kiện cụ thể nào?",
+    "Sai số cảm biến NPK, pH so với phòng thí nghiệm nông nghiệp là bao nhiêu?",
+    "Ngoài đồng ruộng sóng 3G/4G chập chờn hoặc không có Internet thì hệ thống hoạt động ra sao?",
+    "Đất ĐBSCL bị phèn chua và mặn thì đầu dò cảm biến có bị ăn mòn gỉ sét không?",
+    "Người nông dân lớn tuổi có dễ dàng sử dụng hệ thống này trên ruộng lúa không?"
   ];
+
+  // Clean & Rich Text Renderer for Q&A Chat: Renders bold text cleanly and respects existing -, +, • without adding duplicate automatic bullet dots
+  const renderFormattedText = (text: string) => {
+    if (!text) return null;
+    const lines = text.split('\n');
+
+    const parseLineWithBold = (rawLine: string) => {
+      const parts = rawLine.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, pIdx) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return (
+            <strong key={pIdx} className="font-extrabold text-slate-950 bg-emerald-100/60 px-1 py-0.2 rounded mx-0.5 border-b border-emerald-300">
+              {part.slice(2, -2)}
+            </strong>
+          );
+        }
+        return part;
+      });
+    };
+
+    return (
+      <div className="space-y-1.5">
+        {lines.map((line, lineIdx) => {
+          const trimmed = line.trim();
+          if (!trimmed) return <div key={lineIdx} className="h-1" />;
+
+          // Section Heading (numbered 1., 2., 3., etc.)
+          if (/^\d+\.\s/.test(trimmed)) {
+            return (
+              <div key={lineIdx} className="font-extrabold text-slate-950 text-sm mt-2.5 mb-1 bg-emerald-50/80 p-2 rounded-lg border-l-4 border-emerald-600 shadow-2xs">
+                {parseLineWithBold(trimmed)}
+              </div>
+            );
+          }
+
+          // Indented bullet starting with -, +, *, • (no automatic extra dot added)
+          if (line.startsWith('   •') || line.startsWith('   -') || line.startsWith('   +') || line.startsWith('   *') || line.startsWith('  •') || line.startsWith('  -') || line.startsWith('  +')) {
+            return (
+              <div key={lineIdx} className="pl-5 leading-relaxed text-slate-800 font-medium">
+                {parseLineWithBold(trimmed)}
+              </div>
+            );
+          }
+
+          // Line starting with -, +, *, • (no automatic extra dot added)
+          if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('+') || trimmed.startsWith('*')) {
+            return (
+              <div key={lineIdx} className="pl-2.5 leading-relaxed text-slate-800 font-medium">
+                {parseLineWithBold(trimmed)}
+              </div>
+            );
+          }
+
+          return (
+            <p key={lineIdx} className="leading-relaxed font-medium text-slate-800">
+              {parseLineWithBold(line)}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
 
   // Presentation Timer logic
   useEffect(() => {
@@ -815,7 +1014,7 @@ export default function App() {
               id="nav-tab-map"
             >
               <Map className="w-4 h-4" />
-              Bản Đồ Thực Địa
+              Bản Đồ Địa Giới Mới
             </button>
             <button
               onClick={() => setActiveTab("admin")}
@@ -1181,6 +1380,132 @@ export default function App() {
         {activeTab === "sandbox" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" id="panel-sandbox">
             
+            {/* FULL-WIDTH WEATHER INTEGRATION PANEL */}
+            <div className="lg:col-span-12 bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 rounded-2xl p-4 sm:p-5 border border-emerald-800/80 shadow-md text-white flex flex-col gap-4">
+              
+              {/* Header Bar */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-emerald-800/60 pb-3">
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <CloudSun className="w-5 h-5 text-amber-400 shrink-0" />
+                    <h3 className="font-black text-base sm:text-lg text-white tracking-wide uppercase">
+                      Tích Hợp Thời Tiết Real-Time &amp; Tác Động Độ Ẩm Đất
+                    </h3>
+                    <span className="bg-emerald-800/90 text-emerald-200 border border-emerald-600 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      CẦN THƠ METEO LIVE LINKED
+                    </span>
+                  </div>
+                  <p className="text-xs text-emerald-200/80 leading-relaxed">
+                    Mô phỏng tác động trực tiếp của nhiệt độ không khí, lượng mưa và bức xạ nhiệt lên biến động độ ẩm đất, nồng độ muối EC và vi chất dinh dưỡng.
+                  </p>
+                </div>
+
+                {/* Auto Apply Toggle */}
+                <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold shrink-0">
+                  <span className="text-slate-300 text-[11px]">Tự động đồng bộ đất:</span>
+                  <button
+                    onClick={() => setAutoApplyWeather(!autoApplyWeather)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer flex items-center gap-1 ${
+                      autoApplyWeather
+                        ? "bg-emerald-500 text-white shadow-xs"
+                        : "bg-slate-700 text-slate-400"
+                    }`}
+                  >
+                    {autoApplyWeather ? "⚡ ĐANG BẬT" : "OFF"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Notification Banner */}
+              {weatherNotification && (
+                <div className="bg-emerald-500/20 border border-emerald-400 text-emerald-200 px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between animate-fade-in">
+                  <span className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-300 animate-spin" />
+                    {weatherNotification}
+                  </span>
+                  <span className="text-[10px] text-emerald-300 font-mono">ĐỒNG BỘ CẢM BIẾN DÙNG TÍCH</span>
+                </div>
+              )}
+
+              {/* Weather Scenario Preset Selector Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {WEATHER_PRESETS.map((w) => {
+                  const isSelected = selectedWeatherId === w.id;
+                  return (
+                    <button
+                      key={w.id}
+                      onClick={() => applyWeatherToSoilSensor(w.id)}
+                      className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between gap-2.5 ${
+                        isSelected
+                          ? `bg-gradient-to-br ${w.bgGradient} border-white/40 ring-2 ring-emerald-400/80 shadow-lg`
+                          : "bg-slate-800/60 hover:bg-slate-800 border-slate-700/80 text-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">{w.icon}</span>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase ${
+                          isSelected ? "bg-white/20 text-white" : "bg-slate-700 text-slate-300"
+                        }`}>
+                          {w.conditionLabel}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 className="font-bold text-xs text-white leading-snug">{w.name}</h4>
+                        <div className="flex items-center gap-3 mt-1 text-[11px] font-mono text-slate-200">
+                          <span>🌡️ {w.temp}°C</span>
+                          <span>💧 KK: {w.airHumidity}%</span>
+                          {w.rainMm > 0 && <span>🌧️ {w.rainMm}mm</span>}
+                        </div>
+                      </div>
+
+                      {/* Target Soil Impact Badge */}
+                      <div className={`mt-1 pt-2 border-t text-[10px] flex items-center justify-between font-mono ${
+                        isSelected ? "border-white/20 text-emerald-200" : "border-slate-700 text-slate-400"
+                      }`}>
+                        <span>Tác động độ ẩm đất:</span>
+                        <strong className="text-white font-bold text-xs">
+                          {w.targetMoisture}% {w.targetMoisture > 75 ? "📈" : "📉"}
+                        </strong>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Weather Soil Impact Analysis Bar */}
+              <div className="bg-slate-950/80 border border-emerald-800/60 rounded-xl p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+                <div className="flex items-start gap-2.5">
+                  <div className="p-2 bg-emerald-900/60 border border-emerald-700 rounded-lg shrink-0 text-xl">
+                    {activeWeather.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <strong className="text-emerald-300 font-bold text-xs">
+                        Tác Động Lên Cảm Biến Đất ({activeWeather.name}):
+                      </strong>
+                      <span className="text-[10px] font-mono bg-emerald-900/90 text-emerald-200 px-1.5 py-0.2 rounded border border-emerald-700">
+                        Nhiệt độ đất: {activeWeather.targetTemp}°C &bull; EC: {activeWeather.targetEc} mS/cm
+                      </span>
+                    </div>
+                    <p className="text-slate-300 text-[11px] leading-relaxed">
+                      {activeWeather.impactDescription}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => applyWeatherToSoilSensor(selectedWeatherId)}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 px-4 py-2 rounded-xl font-black text-xs transition-all cursor-pointer shadow-md shrink-0 flex items-center gap-1.5"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Đồng Bộ Lên Cảm Biến 7-in-1
+                </button>
+              </div>
+
+            </div>
+            
             {/* Left Column: 7-in-1 Soil Sensor Hub */}
             <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200/80 p-5 flex flex-col gap-5 shadow-xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1494,22 +1819,51 @@ export default function App() {
 
               {/* Dual Sensor Charts: Live Moisture/pH & 7-Day NPK Forecast */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {/* Live Running Chart from Sensor probes */}
-                <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 h-[200px] flex flex-col justify-between shadow-2xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Độ ẩm &amp; pH Đất (Live)</p>
-                    <span className="text-[9px] font-mono font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">CẬP NHẬT 5s</span>
+                {/* Live Running Chart from Sensor probes with Moisture & pH Trend Lines for Judges */}
+                <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 h-[220px] flex flex-col justify-between shadow-2xs">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 mb-1">
+                    <div>
+                      <p className="text-[10px] uppercase font-black text-slate-800 tracking-wider">
+                        Độ ẩm &amp; pH Đất (Live + Đường Xu Hướng)
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        {/* Moisture Trend Indicator */}
+                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border flex items-center gap-1 ${
+                          sensorTrends.moistureDirection === 'rising' ? 'bg-sky-50 text-sky-800 border-sky-300' :
+                          sensorTrends.moistureDirection === 'falling' ? 'bg-amber-50 text-amber-800 border-amber-300' :
+                          'bg-slate-100 text-slate-700 border-slate-300'
+                        }`}>
+                          💧 Độ ẩm: {sensorTrends.moistureDirection === 'rising' ? '📈 TĂNG' : sensorTrends.moistureDirection === 'falling' ? '📉 GIẢM' : '➡️ ỔN ĐỊNH'} ({sensorTrends.moistureDelta >= 0 ? `+${sensorTrends.moistureDelta}` : sensorTrends.moistureDelta}%)
+                        </span>
+                        {/* pH Trend Indicator */}
+                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border flex items-center gap-1 ${
+                          sensorTrends.phDirection === 'rising' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' :
+                          sensorTrends.phDirection === 'falling' ? 'bg-rose-50 text-rose-800 border-rose-300' :
+                          'bg-slate-100 text-slate-700 border-slate-300'
+                        }`}>
+                          🧪 pH: {sensorTrends.phDirection === 'rising' ? '📈 TĂNG' : sensorTrends.phDirection === 'falling' ? '📉 GIẢM' : '➡️ ỔN ĐỊNH'} ({sensorTrends.phDelta >= 0 ? `+${sensorTrends.phDelta}` : sensorTrends.phDelta})
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 shrink-0">
+                      CẬP NHẬT 4s
+                    </span>
                   </div>
-                  <div className="w-full h-[160px]">
+
+                  <div className="w-full h-[155px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={sensorHistory} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                      <LineChart data={formattedSensorHistory} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                         <XAxis dataKey="name" fontSize={8} stroke="#94a3b8" />
                         <YAxis yAxisId="left" stroke="#0ea5e9" fontSize={8} domain={[40, 100]} />
                         <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={8} domain={[3, 9]} />
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <Tooltip contentStyle={{ fontSize: '11px', borderRadius: '8px' }} />
-                        <Line yAxisId="left" type="monotone" dataKey="moisture" stroke="#0ea5e9" name="Độ ẩm (%)" strokeWidth={2} dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="pH" stroke="#10b981" name="pH Đất" strokeWidth={2} dot={false} />
+                        <Tooltip contentStyle={{ fontSize: '11px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
+                        {/* Actual sensor readings */}
+                        <Line yAxisId="left" type="monotone" dataKey="moisture" stroke="#0ea5e9" name="Độ ẩm thực tế (%)" strokeWidth={2.5} dot={{ r: 2 }} />
+                        <Line yAxisId="right" type="monotone" dataKey="pH" stroke="#10b981" name="pH thực tế" strokeWidth={2.5} dot={{ r: 2 }} />
+                        {/* Visual Trend Lines for Judges */}
+                        <Line yAxisId="left" type="linear" dataKey="moistureTrend" stroke="#0284c7" name="Xu hướng Độ ẩm (Trend)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} />
+                        <Line yAxisId="right" type="linear" dataKey="pHTrend" stroke="#059669" name="Xu hướng pH (Trend)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -2350,18 +2704,30 @@ export default function App() {
                       className={`flex ${isJudge ? "justify-start" : "justify-end"} text-xs`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-2xl p-4 shadow-xs leading-relaxed ${
+                        className={`max-w-[85%] rounded-2xl p-4 shadow-xs leading-relaxed border ${
                           isJudge
-                            ? "bg-slate-900 text-white rounded-tl-none border border-slate-800"
-                            : "bg-emerald-50 border border-emerald-100 text-slate-800 rounded-tr-none"
+                            ? "border-2 rounded-tl-none font-semibold shadow-xs"
+                            : "border rounded-tr-none"
                         }`}
+                        style={{
+                          backgroundColor: isJudge ? '#fffbe3' : '#f0fdf4',
+                          borderColor: isJudge ? '#fcd34d' : '#a7f3d0',
+                          color: '#0f172a'
+                        }}
                       >
-                        <div className="flex items-center justify-between mb-1 text-[10px] font-bold uppercase tracking-wider">
-                          <span className={isJudge ? "text-slate-400" : "text-emerald-700"}>
-                            {isJudge ? "BAN GIÁM KHẢO" : "NHÓM TÁC GIẢ HỌC SINH (SUPER RICE)"}
+                        <div className="flex items-center justify-between mb-2 text-[10px] font-bold uppercase tracking-wider border-b pb-1" style={{ borderColor: isJudge ? '#fde68a' : '#cbd5e1' }}>
+                          <span className="font-black text-[11px]" style={{ color: isJudge ? '#78350f' : '#064e3b' }}>
+                            {isJudge ? "🏛️ BAN GIÁM KHẢO PHẢN BIỆN" : "🎓 NHÓM TÁC GIẢ HỌC SINH (SUPER RICE)"}
                           </span>
+                          {!isJudge && (
+                            <span className="text-[9px] font-mono bg-emerald-100/90 px-1.5 py-0.2 rounded border border-emerald-300 normal-case font-bold" style={{ color: '#065f46' }}>
+                              ✓ Tích hợp AI Fusion + Dữ liệu ĐBSCL
+                            </span>
+                          )}
                         </div>
-                        <p className="whitespace-pre-line font-medium leading-relaxed">{msg.text}</p>
+                        <div className="leading-relaxed font-semibold text-xs sm:text-sm" style={{ color: '#0f172a' }}>
+                          {renderFormattedText(msg.text)}
+                        </div>
                       </div>
                     </div>
                   );
