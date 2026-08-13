@@ -163,32 +163,56 @@ app.post("/api/judge-qa", async (req, res) => {
       return res.status(400).json({ error: "Question is required" });
     }
 
+    const fallbackAnswer = `Dạ, kính thưa Ban Giám Khảo, đây là câu hỏi cực kỳ hay chạm đúng vào trái tim công nghệ của đề tài "SUPER RICE" chúng con ạ! Con xin đại diện nhóm trình bày sự phối hợp nhịp nhàng giữa Phần cứng (Thiết bị cảm biến đất) và Phần mềm (Hệ thống AI xử lý ảnh) - đây chính là tính mới, tính sáng tạo đột phá lớn nhất của dự án mà các phần mềm hiện có như Plantix hay NextFarm chưa làm được:
+
+1. **Phần cứng đóng vai trò "Giác quan xúc giác" (Cảm nhận thực địa)**:
+   - Trụ cảm biến tripod dã chiến được nông dân cắm trực tiếp ngoài ruộng, sử dụng đầu dò công nghiệp RS485 kết nối vi điều khiển ESP32-S3. Nó liên tục đo đạc và gửi 7 chỉ số đất quan trọng theo thời gian thực (độ ẩm, nhiệt độ, pH, EC, Đạm - N, Lân - P, Kali - K) lên máy chủ thông qua kết nối mạng không dây.
+
+2. **Phần mềm đóng vai trò "Đôi mắt & Não bộ" (Thị giác máy tính)**:
+   - Khi nông dân cầm điện thoại thông minh chụp ảnh lá lúa qua giao diện Web di động AI-RICE, mô hình AI YOLOv8 gọn nhẹ tích hợp trên server sẽ ngay lập tức định vị và nhận diện các tổn thương, vết đốm trên lá lúa chỉ trong 1-3 giây.
+
+3. **Sự phối hợp nhịp nhàng - Thuật toán "AI Fusion" Đa nguồn**:
+   - **Không chẩn đoán mù quáng**: Một bức ảnh lá lúa bị vàng hay đốm nâu có thể do nấm bệnh, nhưng cũng có thể chỉ là do thiếu hụt dinh dưỡng (như thiếu Kali/Lân). Nếu chỉ dùng ảnh (như các app thông thường), AI rất dễ chẩn đoán sai và khuyên xịt thuốc độc hại.
+   - **Tương tác phối hợp**: Hệ thống của chúng con lập tức đối chiếu ảnh chụp với dữ liệu cảm biến đất của chính thửa ruộng đó:
+     - *Ví dụ 1*: Nếu ảnh có đốm mắt én giống "Bệnh Đạo Ôn" mà cảm biến báo đất đang có hàm lượng Đạm (Nitơ) dư thừa rất cao kèm độ ẩm trên 90%, AI lập tức khẳng định bệnh Đạo Ôn với độ tin cậy >95% (vì Đạm dư và độ ẩm cao là môi trường sinh học kích hoạt nấm Đạo ôn phát triển) và khuyên nông dân ngưng bón đạm ngay lập tức.
+     - *Ví dụ 2*: Nếu lá lúa bị vàng giống "Bệnh vàng lùn/Tungro" nhưng cảm biến đất lại báo chỉ số Kali đang cực kỳ thiếu hụt, AI sẽ sửa sai chẩn đoán, đưa ra kết luận lúa bị "vàng lá sinh lý do thiếu Kali" và khuyên bón thêm Kali chứ không xịt thuốc sâu vô ích.
+
+Sự kết hợp này giống như một người bác sĩ vừa bắt mạch (đo đất) vừa nhìn sắc diện (chụp ảnh lá) để kê đơn chính xác nhất, giúp nông dân tiết kiệm 30-40% chi phí phân bón, thuốc trừ sâu và bảo vệ an toàn sinh thái nông nghiệp ĐBSCL ạ!`;
+
     if (!aiClient) {
       return res.json({
-        answer: "Dự án AI-RICE (Super Rice) kết hợp AI nhận dạng 11 bệnh lúa với cảm biến đất 7-in-1 (ESP32-S3), giúp nông dân phát hiện sớm sâu bệnh và tối ưu dinh dưỡng đất. Hệ thống chạy hoàn toàn trên Web di động, không cần cài app, chi phí phần cứng chỉ khoảng 1.6 - 1.7 triệu VNĐ!"
+        answer: fallbackAnswer
       });
     }
 
     const prompt = `
-Bạn là trợ lý AI đại diện cho Nhóm tác giả Học sinh (Dự án AI-RICE / SUPER RICE, Trường PTDTNT THCS Him Lam, Cần Thơ) đang trả lời câu hỏi của BAN GIÁM KHẢO cuộc thi Sáng Tạo Thanh Thiếu Niên Nhi Đồng.
+Bạn là một học sinh tác giả đại diện cho Nhóm học sinh THCS PTDTNT THCS Him Lam, Châu Thành, Hậu Giang / Cần Thơ (gồm Nguyễn Ngọc Bảo Ngân - 9A9, Trịnh Nguyễn Tường Vy - 8A13, Phan Bùi Giang Ngân - 8A3, Nguyễn Thị Nhựt Quỳnh - 9A9; giáo viên hướng dẫn là Thầy Lê Thanh Liêm).
+Bạn đang trực tiếp trả lời câu hỏi phản biện từ BAN GIÁM KHẢO cuộc thi Sáng Tạo Khoa Học Kỹ Thuật / Sáng Tạo Thanh Thiếu Niên Nhi Đồng với đề tài "SUPER RICE".
 
-THÔNG TIN DỰ ÁN AI-RICE:
-- Tên đề tài: "HỆ THỐNG KẾT HỢP AI NHẬN DẠNG BỆNH LÚA VÀ PHÂN TÍCH ĐẤT TRỒNG THEO THỜI GIAN THỰC TRÊN WEB DI ĐỘNG"
-- Tác giả: Nguyễn Ngọc Bảo Ngân (9A9), Trịnh Nguyễn Tường Vy (8A13), Phan Bùi Giang Ngân (8A3), Nguyễn Thị Nhựt Quỳnh (9A9). GVHD: Thầy Lê Thanh Liêm.
-- Đổi mới sáng tạo:
-  1. Tích hợp AI YOLOv8 + Gemini AI với Cảm biến đất 7 in 1 (N, P, K, pH, EC, Nhiệt độ, Độ ẩm) qua giao tiếp RS485 & vi điều khiển ESP32-S3.
-  2. Nhận diện 11 loại bệnh & sâu hại phổ biến ở ĐBSCL (Bạc lá, Sâu ăn lá, Châu chấu, Lùn cỏ, Sâu cuốn lá, Ngộ độc hữu cơ, Đạo ôn, Đốm vằn, Sâu đục thân, Sọc vi khuẩn, Tungro).
-  3. Triển khai Web di động (không tốn dung lượng, dùng trực tiếp trên trình duyệt điện thoại).
-  4. Thực nghiệm thực địa với 2.000+ ảnh, độ chính xác đạt 90-95%, phản hồi trong 1-3 giây.
-  5. Giá thành phần cứng siêu rẻ: 1.614.000 VNĐ (có trụ cảm biến), 1.487.000 VNĐ (không trụ).
-  6. Mẫu thử tiến hóa qua 3 giai đoạn: Mẫu 1 (Cánh tay robot), Mẫu 2 (Giao diện Web camera - Đạt giải Nhì KH-KT TP), Mẫu 3 (Giao diện tích hợp AI Fusion + Trụ cảm biến thực địa).
+THÔNG TIN ĐỀ TÀI & CÔNG NGHỆ CỐT LÕI:
+- Tên đề tài: "HỆ THỐNG KẾT HỢP AI NHẬN DẠNG BỆNH LÚA VÀ PHÂN TÍCH ĐẤT TRỒNG THEO THỜI GIAN THỰC TRÊN WEB DI ĐỘNG" (SUPER RICE)
+- Tính mới, sáng tạo cốt lõi nhất: SỰ PHỐI HỢP GIỮA PHẦN CỨNG VÀ PHẦN MỀM QUA THUẬT TOÁN "AI FUSION" ĐA NGUỒN.
+  + Phần cứng (Giác quan xúc giác): Trụ cảm biến cắm đất đo 7 thông số (N, P, K, pH, EC, Temp, Humidity) truyền qua RS485 Modbus & ESP32-S3 lên Server, hiển thị cả trên màn hình màu TFT 1.8 inch tại chỗ.
+  + Phần mềm (Đôi mắt & Não bộ): Giao diện Web di động chạy camera chụp lá lúa, nhận diện 11 đối tượng bệnh và sâu hại bằng YOLOv8 gọn nhẹ & Gemini 3.6 Flash phân tích chuyên sâu.
+  + Cơ chế phối hợp thông minh (AI Fusion):
+    * Giải quyết nhược điểm chí mạng của các app truyền thống (như Plantix chỉ nhận diện qua ảnh dễ nhầm thiếu dinh dưỡng với nấm bệnh).
+    * Khi phát hiện vết bệnh vàng/đốm lá bằng camera, AI không vội kết luận mà "hỏi" ngay cảm biến đất.
+    * Nếu lá vàng xơ xác nhưng cảm biến báo thiếu Kali nghiêm trọng -> AI kết luận thiếu dinh dưỡng Kali và hướng dẫn bón phân Kali, cứu nông dân khỏi việc mua thuốc hóa học xịt vô ích.
+    * Nếu lá có vết đốm sọc dưa mà cảm biến báo Đạm (Nitơ) cực cao kèm độ ẩm ẩm độ đất >90% -> AI khẳng định ngay Bệnh Đạo Ôn hoành hành (vì Đạm thừa béo ngậy làm lá lúa mỏng đi, kết hợp độ ẩm cao kích nấm Pyricularia oryzae nảy mầm) và khuyến cáo ngừng bón Đạm tức thì.
+- Lịch sử tiến hóa 3 giai đoạn:
+  + Giai đoạn 1: Cánh tay robot quét ảnh cố định. Nhược điểm: cồng kềnh, bán kính hẹp, đắt đỏ.
+  + Giai đoạn 2: Web camera di động gọn nhẹ chụp ảnh (Đạt giải Nhì cấp Thành phố!). Nhược điểm: chỉ có ảnh, dễ nhận diện sai giữa bệnh và dinh dưỡng.
+  + Giai đoạn 3 (Hiện tại): Kết hợp AI Fusion đa nguồn (Web camera chụp ảnh + Trụ cảm biến đất 7-in-1 truyền dữ liệu thực gian thực). Đây là bước nhảy vọt hoàn hảo!
+- Hiệu quả kinh tế & Môi trường: Tiết kiệm 30-40% phân bón hóa học, giảm thiểu ô nhiễm nguồn nước ngầm, nâng cao năng suất thực nghiệm lên tới 10-15%. Chi phí thiết bị cực kỳ rẻ chỉ khoảng 1.6 triệu VNĐ cho một trạm cảm biến tripod thông minh dã chiến.
 
 CÂU HỎI CỦA BAN GIÁM KHẢO:
 "${question}"
 
-HÃY TRẢ LỜI CÂU HỎI MỘT CÁCH TỰ TIN, KHOA HỌC, LỊCH SỰ, RÕ RÀNG, ĐÍCH THÂN NHƯ MỘT HỌC SINH TÁC GIẢ AM HIỂU SẢN PHẨM:
-- Ngôn ngữ: Tiếng Việt chuẩn mực, lễ phép với Ban Giám Khảo ("Kính thưa Ban Giám Khảo...").
-- Trình bày ngắn gọn, súc tích (3-5 ý chính có gạch đầu dòng), dẫn chứng số liệu thực tế từ 2000+ mẫu thực nghiệm.
+HÃY ĐÓNG VAI TÁC GIẢ HỌC SINH TRẢ LỜI CÂU HỎI MỘT CÁCH TỰ NHIÊN, TRUNG THỰC, LỄ PHÉP, GIÀU NHIỆT HUYẾT VÀ CHẠM ĐÚNG BẢN CHẤT VẤN ĐỀ:
+- Cách xưng hô: Lễ phép mở đầu bằng "Dạ kính thưa Ban Giám Khảo..." hoặc "Dạ con xin đại diện nhóm tác giả kính trả lời câu hỏi của Thầy/Cô ạ...". Xưng hô là "con/chúng con" và gọi BGK là "Thầy/Cô" hoặc "Ban Giám Khảo".
+- Giọng điệu: Hồn nhiên, tự tin của học sinh am hiểu sâu sắc từng con ốc vít phần cứng, từng dòng code phần mềm do chính mình chế tạo. Tránh dùng từ ngữ đao to búa lớn kiểu doanh nghiệp lớn hay SaaS sáo rỗng ("supercharge", "empower"). Hãy dùng từ ngữ mộc mạc của học sinh miền sông nước yêu nông nghiệp Cần Thơ kết hợp với kiến thức khoa học chuẩn xác (RS485, ESP32-S3, YOLOv8, AI Fusion).
+- Trọng tâm trả lời: Hãy khéo léo kết nối câu hỏi của Ban Giám Khảo với tính sáng tạo lớn nhất của dự án là SỰ PHỐI HỢP giữa cảm biến đất (phần cứng) và mô hình AI chụp ảnh (phần mềm), giải thích ví dụ sinh học thực tế ở ruộng (ví dụ bón thừa đạm kích hoạt đạo ôn, thiếu kali gây vàng lá giống bệnh tungro).
+- Cấu trúc câu trả lời: Ngắn gọn, có tính thuyết phục cao, phân bổ thành các ý rõ ràng mạch lạc bằng gạch đầu dòng, có dẫn chứng số liệu thực tế (2.000+ ảnh thực nghiệm, sai số cảm biến dưới 5.5% so với phòng thí nghiệm).
 `;
 
     const response = await aiClient.models.generateContent({
@@ -197,7 +221,7 @@ HÃY TRẢ LỜI CÂU HỎI MỘT CÁCH TỰ TIN, KHOA HỌC, LỊCH SỰ, RÕ R
     });
 
     return res.json({
-      answer: response.text || "Cảm ơn câu hỏi của Ban Giám Khảo. Hệ thống AI-RICE giúp nông dân nhận diện chính xác bệnh lúa và phân tích đất trực tiếp trên điện thoại."
+      answer: response.text || fallbackAnswer
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
